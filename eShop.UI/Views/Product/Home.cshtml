@@ -1,0 +1,217 @@
+﻿@model eShop.UI.ViewModels.ProductVM
+@{
+    ViewData["Title"] = "Products";
+    Layout = "../Shared/_LayoutAdmin";
+    var errorMessage = TempData["ErrorMessage"];
+}
+<div>
+    <button id="modalBtn" type="button" data-toggle="modal" data-target="#productModal">Add Product</button>
+</div>
+
+<div class="container">
+    @if (!String.IsNullOrEmpty(errorMessage as String))
+    {
+        <div>
+            <p style="color:red;">@Convert.ToString(errorMessage)</p>
+        </div>
+    }
+    <br />
+    <div style="width:90%; margin:0 auto;">
+        <table id="example" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="productModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">New Product</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <form asp-action="Post" asp-controller="Product" method="post" enctype="multipart/form-data">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="name">Όνομα:</label>
+                        <input type="text" class="form-control" id="productName" name="Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="code">Κωδικός:</label>
+                        <input type="text" class="form-control" id="code" name="Code">
+                    </div>
+                    <div class="form-group">
+                        <label for="stockQty">Απόθεμα:</label>
+                        <input type="text" class="form-control" id="stockQty" name="StockQty">
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Τιμή:</label>
+                        <input type="text" class="form-control" id="price" name="Price" />
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Κατηγορία:</label>
+                        <!-- dropdownListFor για να εμφανίσω όλες τις κατηγορίες θα βάλω εδώ-->
+                        @Html.DropDownList("CategoryId", Model.Categories, "-", new { Class = "form-control", Id = "CategoryId" })
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input asp-for="Images" class="form-control custom-file-input" name="Images" multiple />
+                            <label class="custom-file-label">Image Upload</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Modal footer -->
+            @*<div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>*@
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var btn = document.getElementById("modalBtn");
+
+        var modal = document.getElementById("productModal");
+
+        // Get the <span>
+        //element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal
+        btn.onclick = function () {
+            modal.style.display = "block";
+            modal.style.height = "950px";
+            modal.style.width = "600px";
+            modal.style.position = "absolute";
+            modal.style.left = "50%";
+            modal.style.right = "50%";
+            modal.style.top = "20%";
+            modal.style.margin = "0 auto";
+        }
+
+        // When the user clicks on <span>
+        //(x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        //var dataArray = [];
+        //$(document).ready(function () {
+        //    $.ajax({
+        //        url: window.origin + '/Product/GetData',
+        //        type: 'Get',
+        //        accept: 'application/json',
+        //        success: function (data) {
+        //            console.log(data);
+        //            dataArray.push(data);
+        //            console.log(dataArray[0]);
+        //        }
+        //    }).then(function () {
+
+        //        $('#example').DataTable({
+        //            "processing": true,
+        //            "serverSide": true,
+        //            "filter": true,
+        //            "orderMulti": false,
+        //            //"ajax": {
+        //            //    "url": window.origin + '/Product/LoadData',
+        //            //    "type": "POST",
+        //            //    "datatype": "json",
+        //            //    "dataSrc": ""
+        //            //},
+        //            "data": dataArray[0],
+        //            "columnDefs": [{
+        //                "targets": [0],
+        //                "visible": false,
+        //                "searchable": false
+        //            }],
+        //            "columns": [
+        //                { "data": "id", "name": "id", "autoWidth": true },
+        //                { "data": "name", "name": "name", "autoWidth": true },
+        //                { "data": "code", "name": "code", "autoWidth": true },
+        //                { "data": "stockQty", "name": "stockQty", "autoWidth": true }
+        //            ]
+
+        //        })
+        //    });
+        //});
+
+        $(document).ready(function () {
+
+            $('#example').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                "orderMulti": false,
+                "ordering": false,
+                "ajax": {
+                    "url": window.origin + '/Product/LoadData',
+                    "type": "POST",
+                    "datatype": "json",
+                    "dataSrc": function (jsonRes) {
+                        console.log(jsonRes);
+                        return jsonRes.data;
+                    }
+                },
+                //"data": dataArray[0],
+                "columnDefs": [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+                "columns": [
+                    { "data": "id", "name": "id", "autoWidth": true },
+                    { "data": "name", "name": "name", "autoWidth": true },
+                    { "data": "code", "name": "code", "autoWidth": true },
+                    { "data": "stockQty", "name": "stockQty", "autoWidth": true }
+                ]
+
+            })
+        });
+
+        $(document).ready(function () {
+            $('.custom-file-input').on('change', function () {
+                var fileLabel = $(this).next('.custom-file-label');
+                var files = $(this)[0].files;
+                if (files.length > 1) {
+                    fileLabel.html(files.length + 'files selected');
+                }
+                else if (files.length == 1) {
+                    fileLabel.html(files[0].name);
+                }
+            })
+        });
+    </script>
+}
+

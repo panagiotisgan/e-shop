@@ -1,0 +1,79 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20191130154422_Initial.cs" />
+    <Compile Remove="Migrations\20191130154422_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20191130160535_Initial.cs" />
+    <Compile Remove="Migrations\20191130160535_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20191130161307_Initial.cs" />
+    <Compile Remove="Migrations\20191130161307_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20191130161608_Initial.cs" />
+    <Compile Remove="Migrations\20191130161608_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20191130162346_Initial.cs" />
+    <Compile Remove="Migrations\20191130162346_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20191130162953_Initial.cs" />
+    <Compile Remove="Migrations\20191130162953_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20191130163713_Initial.cs" />
+    <Compile Remove="Migrations\20191130163713_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20191130171045_Initial.cs" />
+    <Compile Remove="Migrations\20191130171045_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20191130171829_Initial.cs" />
+    <Compile Remove="Migrations\20191130171829_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20191208111419_AlterUserAndCredentialRelation.cs" />
+    <Compile Remove="Migrations\20191208111419_AlterUserAndCredentialRelation.Designer.cs" />
+    <Compile Remove="Migrations\20191208111553_AlterUserTable.cs" />
+    <Compile Remove="Migrations\20191208111553_AlterUserTable.Designer.cs" />
+    <Compile Remove="Migrations\20191227173347_AlterZipCodeFieldTable.cs" />
+    <Compile Remove="Migrations\20191227173347_AlterZipCodeFieldTable.Designer.cs" />
+    <Compile Remove="Migrations\20191227174055_A%3bterUserTable.cs" />
+    <Compile Remove="Migrations\20191227174055_A%3bterUserTable.Designer.cs" />
+    <Compile Remove="Migrations\20200102150552_AlterUserTable.cs" />
+    <Compile Remove="Migrations\20200102150552_AlterUserTable.Designer.cs" />
+    <Compile Remove="Migrations\20200102151102_AlterUserTbl.cs" />
+    <Compile Remove="Migrations\20200102151102_AlterUserTbl.Designer.cs" />
+    <Compile Remove="Migrations\20200102152215_AddFieldsInUserTbl.cs" />
+    <Compile Remove="Migrations\20200102152215_AddFieldsInUserTbl.Designer.cs" />
+    <Compile Remove="Migrations\20200102152730_AddFieldsInUserTbl.cs" />
+    <Compile Remove="Migrations\20200102152730_AddFieldsInUserTbl.Designer.cs" />
+    <Compile Remove="Migrations\20200102154352_test.cs" />
+    <Compile Remove="Migrations\20200102154352_test.Designer.cs" />
+    <Compile Remove="Migrations\20200102154842_test.cs" />
+    <Compile Remove="Migrations\20200102154842_test.Designer.cs" />
+    <Compile Remove="Migrations\20200102155533_010220.cs" />
+    <Compile Remove="Migrations\20200102155533_010220.Designer.cs" />
+    <Compile Remove="Migrations\20200220112121_200220.cs" />
+    <Compile Remove="Migrations\20200220112121_200220.Designer.cs" />
+    <Compile Remove="Migrations\20201215123824_CreateImagesTable.cs" />
+    <Compile Remove="Migrations\20201215123824_CreateImagesTable.Designer.cs" />
+    <Compile Remove="Migrations\20201215124121_CreateImagesTable.cs" />
+    <Compile Remove="Migrations\20201215124121_CreateImagesTable.Designer.cs" />
+    <Compile Remove="Migrations\20201215124415_CreateImagesTable.cs" />
+    <Compile Remove="Migrations\20201215124415_CreateImagesTable.Designer.cs" />
+    <Compile Remove="Migrations\20201215124945_CreateImagesTable.cs" />
+    <Compile Remove="Migrations\20201215124945_CreateImagesTable.Designer.cs" />
+    <Compile Remove="Migrations\20201215125714_151220.cs" />
+    <Compile Remove="Migrations\20201215125714_151220.Designer.cs" />
+    <Compile Remove="Repositories\ProductRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.1.11" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.11" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\eShop.Model\eShop.Model.csproj" />
+  </ItemGroup>
+
+</Project>

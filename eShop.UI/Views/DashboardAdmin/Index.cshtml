@@ -1,0 +1,61 @@
+﻿@model eShop.UI.ViewModels.CreateUserVM
+@{
+    Layout = "../Shared/_LayoutAdmin";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style>
+        h3 {
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+    <h3>Welcome to Dashboard.</h3>
+    <div>
+        <form method="post" asp-controller="User" asp-action="CreateUser">
+            @await Html.PartialAsync("../_CreateUser.cshtml")
+            <div class="form-group">
+                <input asp-for="userDTO.Role" class="form-control" value="@eShop.Model.Role.Admin" hidden/> 
+            </div>
+        </form>
+       
+    </div>
+</body>
+</html>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/site.js"></script>
+    <script>
+    $(function () {
+        $("#StateId").change(function () {
+            DropdownListCreator('User/GetCityById','#StateId','#CityId')
+        })
+    })
+
+    $(function () {
+        $("#CountryId").change(function () {
+            DropdownListCreator('User/GetStateById', '#CountryId', '#StateId')
+        })
+    })
+
+
+    function DropdownListCreator(URL, callerMemberId, dependMemberListId) {
+            var url = '@Url.Content("~/")' + URL.toString();
+            var idSource = callerMemberId;
+            $.getJSON(url, { id: $(idSource).find("option:selected").prop("value") }, function (data) {
+                var items = '';
+                $(dependMemberListId).empty();
+                $.each(data, function (i, row) {
+                    items += "<option value='" + row.value + "'>" + row.text + "</option>";
+                });
+                $(dependMemberListId).html(items);
+            })
+    }
+    </script>

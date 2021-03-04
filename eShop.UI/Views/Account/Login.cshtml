@@ -1,0 +1,41 @@
+﻿@model eShop.UI.ViewModels.LoginDetailsVM
+@{
+    ViewData["Title"] = "Login";
+
+}
+
+<h1>Login</h1>
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="row">
+    <div class="col-md-4">
+        @if (ViewBag.Error != null)
+        {
+                <span>@ViewBag.Error</span>
+        }
+        <form asp-action="Login" asp-controller="Account" method="POST">
+            <div class="form-group">
+                <label asp-for="@Model.Username" class="control-label"></label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="@Model.Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Password" class="control-label"></label>
+                <input asp-for="Password"  class="form-control" />
+                <span asp-validation-for="@Model.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.IsHuman">I'm not a robot</label>
+                <input asp-for="IsHuman" type="checkbox" id="robot" onclick="enableSubmit()" />
+                <span asp-validation-for="@Model.IsHuman" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" disabled />
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/site.js"></script>
+}
+

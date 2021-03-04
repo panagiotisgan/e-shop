@@ -1,0 +1,47 @@
+﻿@model eShop.UI.ViewModels.CreateUserVM
+@{
+    //ViewData["Title"] = "View";
+}
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateUser" asp-controller="User" method="post">
+            @await Html.PartialAsync("../_CreateUser.cshtml")
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+@section scripts{
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/site.js"></script>
+    <script>
+    $(function () {
+        $("#StateId").change(function () {
+            DropdownListCreator('User/GetCityById','#StateId','#CityId')
+        })
+    })
+
+    $(function () {
+        $("#CountryId").change(function () {
+            DropdownListCreator('User/GetStateById', '#CountryId', '#StateId')
+        })
+    })
+    
+
+    function DropdownListCreator(URL, callerMemberId, dependMemberListId) {
+            var url = '@Url.Content("~/")' + URL.toString();
+            var idSource = callerMemberId;
+            $.getJSON(url, { id: $(idSource).find("option:selected").prop("value") }, function (data) {
+                var items = '';
+                $(dependMemberListId).empty();
+                $.each(data, function (i, row) {
+                    items += "<option value='" + row.value + "'>" + row.text + "</option>";
+                });
+                $(dependMemberListId).html(items);
+            })
+    }
+    </script>
+}
