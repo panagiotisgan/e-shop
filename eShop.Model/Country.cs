@@ -13,5 +13,6 @@ namespace eShop.Model
         public ObservableCollection<User> Users { get; set; }
 
         //Test Comment
+        public string SecondBranchString { get; set; }
     }
 }
