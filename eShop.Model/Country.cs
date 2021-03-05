@@ -11,8 +11,5 @@ namespace eShop.Model
         public string Name { get; set; }
         public ObservableCollection<State> States { get; set; }
         public ObservableCollection<User> Users { get; set; }
-
-        //Test Comment
-        public string SecondBranchString { get; set; }
     }
 }
