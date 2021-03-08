@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,11 +22,6 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-
-//ReactJs Usings
-using JavaScriptEngineSwitcher.V8;
-using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
-using React.AspNet;
 
 namespace eShop.UI
 {
@@ -111,14 +107,10 @@ namespace eShop.UI
 
             services.AddSession(options=>options.IdleTimeout = TimeSpan.FromMinutes(30));
 
-            //ReactJs 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddReact();
-
-            // Make sure a JS engine is registered, or you will get an error!
-            services.AddJsEngineSwitcher(options => options.DefaultEngineName = V8JsEngine.EngineName)
-              .AddV8();
-            //End React
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration => {
+                configuration.RootPath = "ClientApp/build";
+            });
 
             services.AddControllersWithViews();
         }
@@ -143,8 +135,9 @@ namespace eShop.UI
             
 
             app.UseHttpsRedirection();
-            app.UseReact(config=> { });
             app.UseStaticFiles();
+
+            app.UseSpaStaticFiles();
 
             app.UseRouting();
 
@@ -185,6 +178,15 @@ namespace eShop.UI
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            // After app.UseEndpoints()
+            app.UseSpa(spa => {
+                spa.Options.SourcePath = "ClientApp";
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
             });
 
             //app.UseEndpoints(endpoints =>

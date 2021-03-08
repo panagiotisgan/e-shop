@@ -1,4 +1,8 @@
-﻿class Product{
+﻿import React, { Component } from 'react'
+import EditProduct from './EditPopUp'
+//import ReactDOM from 'react-dom'
+
+class Product{
     constructor(productId, productName, productQuantity, imagePath, productPrice, productCode) {
         this.productId = productId;
         this.productPrice = productPrice;
@@ -15,7 +19,7 @@ const styles = {
     maxHeight: "80px"
 }
 
-class CreateProductTable extends React.Component {
+export class CreateProductTable extends Component {
     constructor() {
         super()
         this.state = {
@@ -25,7 +29,7 @@ class CreateProductTable extends React.Component {
         }
         this.productIds = [];
         this.products = [];
-        this.editProduct = this.editProduct.bind(this);
+        //this.editProduct = this.editProduct.bind(this);
     }
 
 
@@ -86,14 +90,13 @@ class CreateProductTable extends React.Component {
         console.log(this.products);
     }
 
-    editProduct = id => e => {
-        return (<EditProduct productId={id}/>
-            )
-        console.log("Hello click");
-        console.log(id);
-        //console.log(id);
-        //console.log(e);
-    }
+    //editProduct = id => e => {
+    //    return (<EditProduct productId={id}/>)
+    //    console.log("Hello click");
+    //    console.log(id);
+    //    //console.log(id);
+    //    //console.log(e);
+    //}
 
     renderTable(data, images) {
         this.createTable(data, images);
@@ -117,7 +120,7 @@ class CreateProductTable extends React.Component {
                             <td>{pr.productPrice}</td>
                             <td>{pr.productQuantity}</td>
                             <td><img className="card-columns" style={styles} src={`/images/${pr.imagePath}`} /></td>
-                            <th><a onClick={this.editProduct(pr.productId)}>edit</a></th>
+                            {/*<th><a onClick={this.editProduct(pr.productId)}>edit</a></th>*/}
                             {/* <th><a onClick={<EditProduct productId={pr.productId}/>}>edit</a></th> */}
                         </tr>
                     )}
@@ -137,4 +140,4 @@ class CreateProductTable extends React.Component {
     }
 }
 
-ReactDOM.render(<CreateProductTable />, document.getElementById('container'))
+//ReactDOM.render(<CreateProductTable />, document.getElementById('container'))

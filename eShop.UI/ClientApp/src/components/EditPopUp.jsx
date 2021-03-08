@@ -1,4 +1,6 @@
-﻿class EditProduct extends React.Component {
+﻿import React, { Component } from 'react'
+
+export class EditProduct extends Component {
     constructor(props) {
         super()
         this.state = {
@@ -35,4 +37,4 @@
     }
 }
 
-ReactDOM.render(<EditProduct />, document.getElementById('popup-container'));
+//ReactDOM.render(<EditProduct />, document.getElementById('popup-container'));
