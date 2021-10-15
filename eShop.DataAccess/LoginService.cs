@@ -108,7 +108,7 @@ namespace eShop.DataAccess
                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                );
 
-            var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            var token = tokenHandler.WriteToken(jwtSecurityToken);
             
             userResult.IsAuthenticated = true;
             userResult.Role = user.Role;

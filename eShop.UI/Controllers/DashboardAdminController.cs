@@ -8,7 +8,7 @@ using eShop.DataAccess;
 using eShop.DataAccess.AdditionalDetailsModels;
 using eShop.DataAccess.IRepositories;
 using eShop.DataAccess.IServices;
-using eShop.Model;
+//SOS To Reference sto Model prepei na fugei
 using eShop.UI.ViewModels;
 using eShop.WebApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,7 +22,7 @@ using eShop.DataAccess.DTOs;
 
 namespace eShop.UI.Controllers
 {
-    [Authorize(Roles = Role.User)]
+    [Authorize(Roles = "User")]
     public class DashboardAdminController : Controller
     {
         private readonly UserService _userService;
@@ -32,8 +32,6 @@ namespace eShop.UI.Controllers
         private readonly IStateRepository _stateRepository;
         private readonly ICityRepository _cityRepository;
         private readonly ILoginService _loginService;
-
-        private List<Country> countries = new List<Country>();
         public DashboardAdminController(IUserRepository userRepository, ICredentialRepository credentialRepository,
             ICountryRepository countryRepository, IStateRepository stateRepository, ICityRepository cityRepository,ILoginService loginService)
         {
@@ -45,17 +43,18 @@ namespace eShop.UI.Controllers
             this._loginService = loginService;
             this._userService = new UserService(_userRepository, _credentialRepository,
                 _countryRepository, _stateRepository, _cityRepository);
-            this.countries = _countryRepository.GetAll().ToList();
+            //this.countries = _countryRepository.GetAll().ToList();
         }
 
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             CreateUserVM createUserVM = new CreateUserVM();
             //List<Country> countries = countryServices.GetCountries().ToList();
+            var countries = await _countryRepository.GetAllAsync();
 
-            createUserVM.Countries = this.countries.Select(country => new SelectListItem
+            createUserVM.Countries = countries.Select(country => new SelectListItem
             {
                 Text = country.Name,
                 Value = country.Id.ToString(),
@@ -106,7 +105,7 @@ namespace eShop.UI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = Role.User)]
+        [Authorize(Roles = "User")]
         public IActionResult Home()
         {
             if(User.HasClaim(x => x.Type == ClaimTypes.Name))
