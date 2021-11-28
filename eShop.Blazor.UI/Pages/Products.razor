@@ -1,0 +1,33 @@
+﻿@page "/products"
+@inherits ProductsBase
+
+<h3>Products List</h3>
+
+<table class="table table-responsive-sm">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th></th>
+        </tr>
+    </thead>
+    @if (Products != null)
+    {
+        <tbody>
+            @foreach (var product in Products)
+            {
+
+                <tr>
+                    <td>@product.Code</td>
+                    <td>@product.Name</td>
+                    <td>@product.Price</td>
+                    <td>@product.StockQty</td>
+                    <td><button class="btn btn-danger" @onclick="async () => await DeleteProduct(product.Id)" >Delete</button></td>
+                </tr>
+
+            }
+        </tbody>
+    }
+</table>
