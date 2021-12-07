@@ -20,8 +20,7 @@ namespace eShop.DataAccess
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
-        public virtual DbSet<eShop.Model.Image> Images { get; set; }
-        public virtual DbSet<BlazorModel> BlazorModels { get; set; }
+        public virtual DbSet<eShop.Model.Image> Images { get; set; }      
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
