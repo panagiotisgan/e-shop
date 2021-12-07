@@ -30,12 +30,15 @@ namespace eShop.Model
         }
 
         //Error, για να παίξει σωστά πρέπει να πάρω το imagePath και να φέρω το image να το διαχειριστώ μάλλον
-        public void SetImages(string titleAttribute,string imagePath)
+        public void SetImages(string titleAttribute,string imagePath,byte[] imageInBytes)
         {
             Image image = new Image();
             image.ProductId = this.Id;
             image.TitleAttribute = titleAttribute;
             image.ImagePath = imagePath;
+
+            /*new prop*/
+            image.PictureInByte = imageInBytes;
 
             Images.Add(image);
         }

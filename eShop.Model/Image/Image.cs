@@ -9,5 +9,6 @@ namespace eShop.Model
         public long ProductId { get; set; }
         public string ImagePath { get; set; }
         public string TitleAttribute { get; set; }
+        public byte[] PictureInByte { get; set; }
     }
 }
