@@ -16,6 +16,17 @@ namespace eShop.Blazor.UI.Services
             _client = client;
         }
 
+        public async Task CreateProductAsync(Product product)
+        {
+            var jsonObject = JsonConvert.SerializeObject(product);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(jsonObject);
+            var byteContent = new ByteArrayContent(buffer);
+
+            byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            await this._client.PostAsync("api/Products",byteContent);
+        }
+
         public async Task DeleteProduct(long productId)
         {
             await _client.DeleteAsync($"api/Products/delete?productId={productId}");            

@@ -2,7 +2,11 @@
 @inherits ProductsBase
 
 <h3>Products List</h3>
-
+<div class="row">
+    <div class="col-6 col-md-2">
+        <a href="/createProduct"><button class="btn btn-outline-primary">Add Product</button></a>
+    </div>
+</div>
 <table class="table table-responsive-sm">
     <thead>
         <tr>
@@ -24,10 +28,13 @@
                     <td>@product.Name</td>
                     <td>@product.Price</td>
                     <td>@product.StockQty</td>
-                    <td><button class="btn btn-danger" @onclick="async () => await DeleteProduct(product.Id)" >Delete</button></td>
+                    <td><button class="btn btn-danger" @onclick="async () => await DeleteProduct(product.Id)">Delete</button></td>
                 </tr>
 
             }
         </tbody>
     }
 </table>
+@code {
+    [CascadingParameter] public IModalService Modal { get; set; }
+}

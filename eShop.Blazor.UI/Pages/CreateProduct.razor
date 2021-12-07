@@ -1,0 +1,85 @@
+﻿@page "/create"
+@page "/createProduct"
+@inherits CreateProductBase
+@inject NavigationManager NavigationManager
+
+<h3>Create Product</h3>
+
+<form method="post">
+    <div class="form-group col-md-6">
+        <label for="Name">Name</label>
+        <input @bind="Name" class="form-control col-form-label-sm col-md-6" type="text" id="name" />
+    </div>
+    <div class="form-group col-md-6">
+        <label for="Code">Code</label>
+        <input @bind="Code" class="form-control col-form-label-sm col-md-6" type="text" id="code" />
+    </div>
+    <div class="form-group col-md-6">
+        <label for="Price">Price</label>
+        <input @bind="Price" class="form-control col-form-label-sm col-md-6" type="text" id="price" />
+    </div>
+    <div class="form-group col-md-6">
+        <label for="StockQty">Quantity</label>
+        <input @bind="StockQty" class="form-control col-form-label-sm col-md-6" type="text" id="stockQty" />
+    </div>
+    <div class="form-group col-md-6">
+        <label for="Category">Category</label>
+        <select class="form-control col-md-6" @bind="CategoryId" name="categories">
+            <option value="0">-Select Category-</option>
+            @if (Categories != null)
+            {
+                @foreach (var item in Categories)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            }
+
+        </select>
+    </div>
+    <div class="form-group col-md-6">
+        <label for="Image">Image</label>
+        <input type="image" class="form-control col-md-6" id="image"/>
+    </div>
+    <button @onclick="async ()=> await OnSubmit()" class="btn btn-primary">Save</button>
+    @*<button @onclick="async ()=> await OnCancel()" class="btn btn-danger">Close</button>*@
+</form>
+
+@code{
+    string Name { get; set; }
+    string Code { get; set; }
+    decimal Price { get; set; }
+    decimal StockQty { get; set; }
+    public long CategoryId { get; set; }
+    bool InStock { get; set; }
+
+
+
+    private async Task OnSubmit()
+    {
+        try
+        {
+            SetProductAvailability();
+            await ProductService.CreateProductAsync(new Dto_Model.Product { Name = Name, Price = Price, StockQty = StockQty, CategoryId = CategoryId, InStock = InStock });
+            NavigationManager.NavigateTo("products");
+        }
+        catch(Exception ex)
+        {
+            
+        }
+
+
+    }
+
+    private void SetProductAvailability()
+        {
+            if (StockQty > 0)
+                InStock = true;
+            else
+                InStock = false;
+        }
+
+    //private async Task OnCancel()
+    //{
+    //    await ModalInstance.CancelAsync();
+    //}
+}

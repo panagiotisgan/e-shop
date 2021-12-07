@@ -15,5 +15,6 @@ namespace eShop.Blazor.UI.Dto_Model
         public decimal Price { get; set; }
         public long CategoryId { get; set; }
         public Category Category { get; set; }
+        public List<Image> Images { get; set; } = new List<Image>();        
     }
 }
