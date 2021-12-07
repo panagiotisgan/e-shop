@@ -109,7 +109,7 @@ namespace eShop.UI.Controllers
                     //image.ImagePath = name;
                     //var send = await apiMethods.PostAsync<Image>()
 
-                    product.SetImages(String.Empty,name);
+                    product.SetImages(String.Empty,name, new byte[10]);
                 }
             }
 
@@ -216,7 +216,7 @@ namespace eShop.UI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    
                 }
             }
             return uniqueFileName;

@@ -8,26 +8,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ClientApp\**" />
     <Compile Remove="wwwroot\ReactComponents\**" />
+    <Content Remove="ClientApp\**" />
     <Content Remove="wwwroot\ReactComponents\**" />
+    <EmbeddedResource Remove="ClientApp\**" />
     <EmbeddedResource Remove="wwwroot\ReactComponents\**" />
+    <None Remove="ClientApp\**" />
     <None Remove="wwwroot\ReactComponents\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="appSettings.json" />
+    <Content Remove="wwwroot\favicon.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.11" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.7" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7">
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="sendgrid" Version="9.12.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.7" />
@@ -51,6 +56,32 @@
     <Content Remove="$(SpaRoot)**" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\.env" />
+    <None Remove="ClientApp\.gitignore" />
+    <None Remove="ClientApp\package-lock.json" />
+    <None Remove="ClientApp\package.json" />
+    <None Remove="ClientApp\public\favicon.ico" />
+    <None Remove="ClientApp\public\index.html" />
+    <None Remove="ClientApp\public\manifest.json" />
+    <None Remove="ClientApp\README.md" />
+    <None Remove="ClientApp\src\App.js" />
+    <None Remove="ClientApp\src\App.test.js" />
+    <None Remove="ClientApp\src\components\Counter.js" />
+    <None Remove="ClientApp\src\components\EditPopUp.jsx" />
+    <None Remove="ClientApp\src\components\FetchData.js" />
+    <None Remove="ClientApp\src\components\Home.js" />
+    <None Remove="ClientApp\src\components\Layout.js" />
+    <None Remove="ClientApp\src\components\NavMenu.css" />
+    <None Remove="ClientApp\src\components\NavMenu.js" />
+    <None Remove="ClientApp\src\components\popup.css" />
+    <None Remove="ClientApp\src\components\Product.js" />
+    <None Remove="ClientApp\src\components\ProductTable.jsx" />
+    <None Remove="ClientApp\src\custom.css" />
+    <None Remove="ClientApp\src\index.js" />
+    <None Remove="ClientApp\src\registerServiceWorker.js" />
   </ItemGroup>
   
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

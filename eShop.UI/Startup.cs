@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Session;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -108,9 +107,9 @@ namespace eShop.UI
             services.AddSession(options=>options.IdleTimeout = TimeSpan.FromMinutes(30));
 
             // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration => {
-                configuration.RootPath = "ClientApp/build";
-            });
+            //services.AddSpaStaticFiles(configuration => {
+            //    configuration.RootPath = "ClientApp/build";
+            //});
 
             services.AddControllersWithViews();
         }
@@ -129,6 +128,8 @@ namespace eShop.UI
                 app.UseHsts();
             }
 
+            app.UseBlazorFrameworkFiles();
+
             app.UseCookiePolicy();
             app.UseSession();
 
@@ -137,7 +138,7 @@ namespace eShop.UI
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseSpaStaticFiles();
+            //app.UseSpaStaticFiles();
 
             app.UseRouting();
 
@@ -181,28 +182,29 @@ namespace eShop.UI
             });
 
             // After app.UseEndpoints()
-            app.UseSpa(spa => {
-                spa.Options.SourcePath = "ClientApp";
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
-
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //        name: "default",
-            //        pattern: "{controller=Home}/{action=Index}/{id?}");
-            //    endpoints.MapControllerRoute(
-            //        name: "admin",
-            //        pattern: "{controller=DashboardAdmin}/{action=Index}/{id?}"
-            //        );
-            //    endpoints.MapControllerRoute(
-            //        name: "user",
-            //        pattern: "{controller=User}/{action=CreateUser}/{id?}"
-            //        );
+            //app.UseSpa(spa => {
+            //    spa.Options.SourcePath = "ClientApp";
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseReactDevelopmentServer(npmScript: "start");
+            //    }
             //});
+
+            app.UseEndpoints(endpoints =>
+            {
+                //endpoints.MapControllerRoute(
+                //    name: "default",
+                //    pattern: "{controller=Home}/{action=Index}/{id?}");
+                //endpoints.MapControllerRoute(
+                //    name: "admin",
+                //    pattern: "{controller=DashboardAdmin}/{action=Index}/{id?}"
+                //    );
+                //endpoints.MapControllerRoute(
+                //    name: "user",
+                //    pattern: "{controller=User}/{action=CreateUser}/{id?}"
+                //    );
+                endpoints.MapFallbackToFile("index.html");
+            });
         }
     }
 
