@@ -65,7 +65,7 @@ namespace eShop.WebApi.Controllers
 
         //api/Users
         [HttpGet]
-        [Authorize(Roles = Role.User)]
+        //[Authorize(Roles = Role.User)]
         public IActionResult GetAll()
         {
             var users = _userRepository.GetAll();

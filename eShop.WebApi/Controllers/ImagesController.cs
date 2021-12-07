@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace eShop.WebApi.Controllers
 {
-    [EnableCors("Policy")]
+    //[EnableCors("Policy")]
     [Route("api/[controller]")]
     [ApiController]
     public class ImagesController : ControllerBase

@@ -60,7 +60,7 @@ namespace eShop.WebApi
 
             services.AddCors(options =>
             {
-                options.AddPolicy("Policy",
+                options.AddPolicy("Open",
                     builder =>
                     {
                         builder.AllowAnyOrigin()
@@ -69,7 +69,10 @@ namespace eShop.WebApi
                     });
             });
 
+
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
+
+            services.AddControllers().AddNewtonsoftJson(opt => { opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,10 +85,17 @@ namespace eShop.WebApi
 
             app.UseRouting();
 
-            app.UseCors();
+            //app.UseCors(policy=>
+            //policy.WithOrigins("http://localhost:25770","https://localhost:44337")
+            //                   .AllowAnyHeader()
+            //                   .AllowAnyMethod());
+
+
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCors("Open");
 
             app.UseEndpoints(endpoints =>
             {

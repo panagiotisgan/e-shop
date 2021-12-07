@@ -12,19 +12,22 @@ using System.Threading.Tasks;
 
 namespace eShop.WebApi.Controllers
 {
-    [EnableCors("Policy")]
-    [Authorize(Roles = Role.MultipleRoles)]
+    //[EnableCors("Policy")]
+    //[Authorize(Roles = Role.MultipleRoles)]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
         private readonly IProductUnitOfWork _productUnitOfWork;
-        public ProductsController(IProductUnitOfWork _productRepository)
+        private readonly IImageUnitOfWork _imageUnitOfWork;
+        public ProductsController(IProductUnitOfWork _productRepository, IImageUnitOfWork _imageUnitOfWork)
         {
             this._productUnitOfWork = _productRepository;
+            this._imageUnitOfWork = _imageUnitOfWork;
         }
 
         [AllowAnonymous]
+        [HttpGet]
         [Route("GetProducts")]
         public async Task<IActionResult> GetProducts()
         {
@@ -42,7 +45,7 @@ namespace eShop.WebApi.Controllers
 
         [Authorize(Roles = Role.MultipleRoles)]
         [HttpPost]
-        public IActionResult Post([FromBody]Product product)
+        public IActionResult Post([FromBody] Product product)
         {
             if (!ModelState.IsValid)
             {
@@ -54,12 +57,47 @@ namespace eShop.WebApi.Controllers
                 this._productUnitOfWork.ProductRepository.CreateEntity(product);
                 this._productUnitOfWork.Save();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
 
             return this.Ok();
+        }
+        
+        [HttpDelete("delete")]
+        public async Task<IActionResult> Delete([FromQuery]long productId)
+        {
+            if (productId == 0)
+                return BadRequest();
+
+            try
+            {
+                var imageList = await this._imageUnitOfWork.ImageDbRepository.GetImagesByProductIdAsync(productId);
+                if (imageList != null)
+                {
+                    foreach (var item in imageList)
+                    {
+                        this._imageUnitOfWork.ImageDbRepository.DeleteEntity(item.Id);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
+
+            try
+            {
+                this._productUnitOfWork.ProductRepository.DeleteEntity(productId);
+                this._productUnitOfWork.Save();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+
+            return Ok();
         }
     }
 }
