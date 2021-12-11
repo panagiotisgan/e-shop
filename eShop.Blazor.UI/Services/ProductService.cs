@@ -16,20 +16,43 @@ namespace eShop.Blazor.UI.Services
             _client = client;
         }
 
-        public async Task CreateProductAsync(Product product)
+        public async Task CreateOrUpdateProductAsync(Product product)
         {
             var jsonObject = JsonConvert.SerializeObject(product);
             var buffer = System.Text.Encoding.UTF8.GetBytes(jsonObject);
             var byteContent = new ByteArrayContent(buffer);
 
             byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-
-            await this._client.PostAsync("api/Products",byteContent);
+            if (product.Id > 0)
+                await this._client.PutAsync("api/Products", byteContent);
+           else
+                await this._client.PostAsync("api/Products", byteContent);
         }
 
         public async Task DeleteProduct(long productId)
         {
-            await _client.DeleteAsync($"api/Products/delete?productId={productId}");            
+            await _client.DeleteAsync($"api/Products/delete?productId={productId}");
+        }
+
+        public async Task<Product> GetByIdAsync(long productId)
+        {
+            try
+            {
+                var response = await this._client.GetAsync($"api/Products/GetProduct/{productId}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    var product = JsonConvert.DeserializeObject<Product>(result);
+                    return product;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            return null;
         }
 
         public async Task<IEnumerable<Product>> GetProductsAsync()

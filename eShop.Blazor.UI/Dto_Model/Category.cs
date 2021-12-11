@@ -10,6 +10,6 @@ namespace eShop.Blazor.UI.Dto_Model
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public ObservableCollection<Product> Products { get; set; }
+        public ObservableCollection<Product> Products { get; set; } = new ObservableCollection<Product>();
     }
 }

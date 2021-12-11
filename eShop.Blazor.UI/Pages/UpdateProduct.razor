@@ -1,0 +1,112 @@
+﻿@page "/UpdateProduct/{Value}"
+@using eShop.Blazor.UI.Dto_Model
+@inject NavigationManager navigationManager
+
+@*TO DO add update form to display and change product Data*@
+<form method="post">
+    <div>
+        <input @bind="Id" type="text" id="id" hidden/>
+    </div>
+    <div class="form-group col-md-6">
+        <label for="Name">Name</label>
+        <input @bind="Name" class="form-control col-form-label-sm col-md-6" type="text" id="name" />
+    </div>
+    <div class="form-group col-md-6">
+        <label for="Code">Code</label>
+        <input @bind="Code" class="form-control col-form-label-sm col-md-6" type="text" id="code" />
+    </div>
+    <div class="form-group col-md-6">
+        <label for="Price">Price</label>
+        <input @bind="Price" class="form-control col-form-label-sm col-md-6" type="text" id="price" />
+    </div>
+    <div class="form-group col-md-6">
+        <label for="StockQty">Quantity</label>
+        <input @bind="StockQty" class="form-control col-form-label-sm col-md-6" type="text" id="stockQty" />
+    </div>
+    <div class="form-group col-md-6">
+        <label for="Category">Category</label>
+        <select class="form-control col-md-6" @bind="CategoryId" name="categories">
+            <option value="@CategoryId">@CategoryName</option>
+            @if (Categories != null)
+            {
+                @foreach (var item in Categories)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            }
+
+        </select>
+    </div>
+    <div class="form-group col-md-6">
+        <label for="Image">Image</label>
+        <input type="image" class="form-control col-md-6" id="image" />
+    </div>
+    <button @onclick="async ()=> await OnSubmit()" class="btn btn-primary">Save</button>
+    @*<button @onclick="async ()=> await OnCancel()" class="btn btn-danger">Close</button>*@
+</form>
+
+@code {
+    [Parameter]
+    public string Value { get; set; }
+    [Inject]
+    protected IProductService ProductService { get; set; }
+    [Inject]
+    protected ICategoryService CategoryService { get; set; }
+
+    private IEnumerable<Category> Categories { get; set; } = new List<Category>();
+    private Category Category { get; set; }
+    private Product Product { get; set; }
+    public long productId { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        productId = Convert.ToInt64(Value);
+        Product = await ProductService.GetByIdAsync(productId);
+        Categories = (await CategoryService.GetCategoriesAsync()).ToList();      
+
+        Category = Categories.FirstOrDefault(x => x.Id == Product.CategoryId);
+        Categories = Categories.Where(x => x.Id != Product.CategoryId).ToList();
+
+        Id = productId;
+        Name = Product.Name;
+        Code = Product.Code;
+        Price = Product.Price;
+        StockQty = Product.StockQty;
+        CategoryId = Product.CategoryId;
+        CategoryName = Category.Name;
+
+        //return base.OnInitializedAsync();
+    }
+
+    /*For update product*/
+    long Id { get; set; }
+    string Name { get; set; }
+    string Code { get; set; }
+    decimal Price { get; set; }
+    decimal StockQty { get; set; }
+    long CategoryId { get; set; }
+    bool InStock { get; set; }
+    string CategoryName { get; set; }
+
+    private async Task OnSubmit()
+    {
+        try
+        {
+            SetProductAvailability();
+            await ProductService.CreateOrUpdateProductAsync(new Dto_Model.Product { Name = Name, Price = Price, StockQty = StockQty, CategoryId = CategoryId, InStock = InStock, Code = Code, Id = Id });
+            navigationManager.NavigateTo("products");
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void SetProductAvailability()
+    {
+        if (StockQty > 0)
+            InStock = true;
+        else
+            InStock = false;
+    }
+}

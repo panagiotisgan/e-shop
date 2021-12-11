@@ -10,6 +10,7 @@ namespace eShop.Blazor.UI.Services
     {
         Task<IEnumerable<Product>> GetProductsAsync();
         Task DeleteProduct(long productId);
-        Task CreateProductAsync(Product product);
+        Task CreateOrUpdateProductAsync(Product product);
+        Task<Product> GetByIdAsync(long productId);
     }
 }

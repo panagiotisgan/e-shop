@@ -13,6 +13,7 @@ namespace eShop.Blazor.UI.Pages
         [Inject]
         public IProductService ProductService { get; set; }
         public IEnumerable<Product> Products { get; set; }
+        public string Value { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -22,6 +23,7 @@ namespace eShop.Blazor.UI.Pages
         public async Task DeleteProduct(long productId)
         {
             await ProductService.DeleteProduct(productId);
-        }
+            Products = (await ProductService.GetProductsAsync()).ToList();
+        }       
     }
 }

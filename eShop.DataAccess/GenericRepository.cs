@@ -34,7 +34,7 @@ namespace eShop.DataAccess
 
         public virtual void UpdateEntity(TEntity entity)
         {
-            _context.Set<TEntity>().UpdateRange();
+            _context.Set<TEntity>().Update(entity);
         }
         public void CreateEntity(TEntity entity)
         {

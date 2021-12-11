@@ -43,7 +43,7 @@ namespace eShop.WebApi.Controllers
             return this.Ok(await this._productUnitOfWork.ProductRepository.GetByIdAsync(productId));
         }
 
-        [Authorize(Roles = Role.MultipleRoles)]
+        //[Authorize(Roles = Role.MultipleRoles)]
         [HttpPost]
         public IActionResult Post([FromBody] Product product)
         {
@@ -65,6 +65,27 @@ namespace eShop.WebApi.Controllers
             return this.Ok();
         }
         
+        [HttpPut]
+        public IActionResult Update([FromBody] Product product)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.BadRequest();
+            }
+
+            try
+            {
+                this._productUnitOfWork.ProductRepository.UpdateEntity(product);
+                this._productUnitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+            return this.Ok();
+        }
+
         [HttpDelete("delete")]
         public async Task<IActionResult> Delete([FromQuery]long productId)
         {

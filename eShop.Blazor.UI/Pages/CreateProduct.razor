@@ -59,7 +59,7 @@
         try
         {
             SetProductAvailability();
-            await ProductService.CreateProductAsync(new Dto_Model.Product { Name = Name, Price = Price, StockQty = StockQty, CategoryId = CategoryId, InStock = InStock });
+            await ProductService.CreateOrUpdateProductAsync(new Dto_Model.Product { Name = Name, Price = Price, StockQty = StockQty, CategoryId = CategoryId, InStock = InStock, Code = Code });
             NavigationManager.NavigateTo("products");
         }
         catch(Exception ex)
