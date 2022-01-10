@@ -19,12 +19,12 @@ namespace eShop.WebApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly LoginService _loginService;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserUnitOfWork _userUnitOfWork;
        //public HttpContext _httpContext;
-        public UsersController(IUserRepository userRepository,LoginService loginService/*, HttpContext httpContext*/)
+        public UsersController(IUserUnitOfWork _userUnitOfWork, LoginService loginService/*, HttpContext httpContext*/)
         {
             //this._loginService = loginService;
-            this._userRepository = userRepository;
+            this._userUnitOfWork = _userUnitOfWork;
             this._loginService = loginService;
             //this._httpContext = httpContext;
         }
@@ -63,12 +63,19 @@ namespace eShop.WebApi.Controllers
             return Ok(authenticatedUserResult);
         }
 
+        [AllowAnonymous]
+        [HttpPost("AddUser")]
+        public IActionResult CreateUser([FromBody] UserDTO user)
+        {
+            return null;
+        }
+
         //api/Users
         [HttpGet]
         //[Authorize(Roles = Role.User)]
         public IActionResult GetAll()
         {
-            var users = _userRepository.GetAll();
+            var users = _userUnitOfWork.UserDbRepository.GetAll();
             //this._context.User.Identity.
 
             return Ok(users);

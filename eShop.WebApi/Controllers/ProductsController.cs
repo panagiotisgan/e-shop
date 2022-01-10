@@ -26,7 +26,7 @@ namespace eShop.WebApi.Controllers
             this._imageUnitOfWork = _imageUnitOfWork;
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet]
         [Route("GetProducts")]
         public async Task<IActionResult> GetProducts()
@@ -40,7 +40,8 @@ namespace eShop.WebApi.Controllers
         [Route("GetProduct/{productId}")]
         public async Task<IActionResult> GetByIdAsync(long productId)
         {
-            return this.Ok(await this._productUnitOfWork.ProductRepository.GetByIdAsync(productId));
+            //return this.Ok(await this._productUnitOfWork.ProductRepository.GetByIdAsync(productId));
+            return this.Ok(await this._productUnitOfWork.ProductRepository.GetProductAsync(productId));
         }
 
         //[Authorize(Roles = Role.MultipleRoles)]

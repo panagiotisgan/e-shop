@@ -4,12 +4,15 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace eShop.Blazor.UI.Pages
 {
     public class ProductsBase : ComponentBase
     {
+        private HttpRequestMessage _httpRequest;
+        
         [Inject]
         public IProductService ProductService { get; set; }
         public IEnumerable<Product> Products { get; set; }
@@ -17,13 +20,15 @@ namespace eShop.Blazor.UI.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            Products = (await ProductService.GetProductsAsync()).ToList();
+            _httpRequest = new HttpRequestMessage();
+            Products = (await ProductService.GetProductsAsync(_httpRequest)).ToList();
         }
 
         public async Task DeleteProduct(long productId)
         {
+            _httpRequest = new HttpRequestMessage();
             await ProductService.DeleteProduct(productId);
-            Products = (await ProductService.GetProductsAsync()).ToList();
+            Products = (await ProductService.GetProductsAsync(_httpRequest)).ToList();
         }       
     }
 }

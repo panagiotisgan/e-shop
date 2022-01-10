@@ -1,45 +1,73 @@
 ﻿@page "/UpdateProduct/{Value}"
+@using eShop.Blazor.UI.Components
 @using eShop.Blazor.UI.Dto_Model
 @inject NavigationManager navigationManager
 
 @*TO DO add update form to display and change product Data*@
 <form method="post">
-    <div>
-        <input @bind="Id" type="text" id="id" hidden/>
-    </div>
-    <div class="form-group col-md-6">
-        <label for="Name">Name</label>
-        <input @bind="Name" class="form-control col-form-label-sm col-md-6" type="text" id="name" />
-    </div>
-    <div class="form-group col-md-6">
-        <label for="Code">Code</label>
-        <input @bind="Code" class="form-control col-form-label-sm col-md-6" type="text" id="code" />
-    </div>
-    <div class="form-group col-md-6">
-        <label for="Price">Price</label>
-        <input @bind="Price" class="form-control col-form-label-sm col-md-6" type="text" id="price" />
-    </div>
-    <div class="form-group col-md-6">
-        <label for="StockQty">Quantity</label>
-        <input @bind="StockQty" class="form-control col-form-label-sm col-md-6" type="text" id="stockQty" />
-    </div>
-    <div class="form-group col-md-6">
-        <label for="Category">Category</label>
-        <select class="form-control col-md-6" @bind="CategoryId" name="categories">
-            <option value="@CategoryId">@CategoryName</option>
-            @if (Categories != null)
-            {
-                @foreach (var item in Categories)
-                {
-                    <option value="@item.Id">@item.Name</option>
-                }
-            }
 
-        </select>
+    <div>
+        <input @bind="Id" type="text" id="id" hidden />
     </div>
-    <div class="form-group col-md-6">
-        <label for="Image">Image</label>
-        <input type="image" class="form-control col-md-6" id="image" />
+    <div class="row">
+        <div class="form-group col-12 col-md-4">
+            <label for="Name">Name</label>
+            <input @bind="Name" class="form-control col-form-label-sm col-md-6" type="text" id="name" />
+        </div>
+        <div class="form-group col-12 col-md-4">
+            <label for="Code">Code</label>
+            <input @bind="Code" class="form-control col-form-label-sm col-md-6" type="text" id="code" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-12 col-md-4">
+            <label for="Price">Price</label>
+            <input @bind="Price" class="form-control col-form-label-sm col-md-6" type="text" id="price" />
+        </div>
+        <div class="form-group col-12 col-md-4">
+            <label for="StockQty">Quantity</label>
+            <input @bind="StockQty" class="form-control col-form-label-sm col-md-6" type="text" id="stockQty" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-12 col-md-4">
+            <label for="Category">Category</label>
+            <select class="form-control col-md-6" @bind="CategoryId" name="categories">
+                <option value="@CategoryId">@CategoryName</option>
+                @if (Categories != null)
+                {
+                    @foreach (var item in Categories)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                }
+
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-12 col-md-4">
+            <InputFile OnChange="@LoadFiles" multiple />
+        </div>
+        @if (Images.Count != 0)
+        {
+            @if (Images.Count == 1)
+            {
+                @foreach (var image in Images)
+                {
+                    <ImageComponent ImagePath="@image.ImagePath" ImageId="@image.Id" OnImageDeleted="async () => await ImageDeleted()"/>
+                }
+
+            }
+            else
+            {
+                @foreach (var image in Images)
+                {
+                    <ImageComponent ImagePath="@image.ImagePath" OnImageDeleted="async () => await ImageDeleted()"/>
+                }
+
+            }
+        }
     </div>
     <button @onclick="async ()=> await OnSubmit()" class="btn btn-primary">Save</button>
     @*<button @onclick="async ()=> await OnCancel()" class="btn btn-danger">Close</button>*@
@@ -52,17 +80,37 @@
     protected IProductService ProductService { get; set; }
     [Inject]
     protected ICategoryService CategoryService { get; set; }
+    [Inject]
+    protected IImageService ImageService { get; set; }
 
     private IEnumerable<Category> Categories { get; set; } = new List<Category>();
     private Category Category { get; set; }
     private Product Product { get; set; }
     public long productId { get; set; }
 
+    /*For update product*/
+    long Id { get; set; }
+    string Name { get; set; }
+    string Code { get; set; }
+    decimal Price { get; set; }
+    decimal StockQty { get; set; }
+    long CategoryId { get; set; }
+    bool InStock { get; set; }
+    string CategoryName { get; set; }
+    Image Image { get; set; } = new Image();
+    List<Image> Images = new List<Image>();
+
+    protected async Task ImageDeleted()
+    {
+        await RefreshImageList(Id);
+    }
+
     protected async override Task OnInitializedAsync()
     {
+        Images.Clear();
         productId = Convert.ToInt64(Value);
         Product = await ProductService.GetByIdAsync(productId);
-        Categories = (await CategoryService.GetCategoriesAsync()).ToList();      
+        Categories = (await CategoryService.GetCategoriesAsync()).ToList();
 
         Category = Categories.FirstOrDefault(x => x.Id == Product.CategoryId);
         Categories = Categories.Where(x => x.Id != Product.CategoryId).ToList();
@@ -74,19 +122,12 @@
         StockQty = Product.StockQty;
         CategoryId = Product.CategoryId;
         CategoryName = Category.Name;
+        Images = Product.Images;
 
         //return base.OnInitializedAsync();
     }
 
-    /*For update product*/
-    long Id { get; set; }
-    string Name { get; set; }
-    string Code { get; set; }
-    decimal Price { get; set; }
-    decimal StockQty { get; set; }
-    long CategoryId { get; set; }
-    bool InStock { get; set; }
-    string CategoryName { get; set; }
+
 
     private async Task OnSubmit()
     {
@@ -108,5 +149,50 @@
             InStock = true;
         else
             InStock = false;
+    }
+
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        Images.Clear();
+        var result = e.GetMultipleFiles();
+        if (result.Count > 0)
+        {
+            for (var i = 0; i <= result.Count - 1; i++)
+            {
+                try
+                {
+                    var file = result[i];
+
+                    byte[] buffer = new byte[result[i].Size];
+
+                    await file.OpenReadStream().ReadAsync(buffer);
+                    Image.ImagePath = $"data:image/png;base64,{Convert.ToBase64String(buffer)}";
+                    Images.Add(Image);
+                    //using (FileStream fs = File.OpenRead(@$"C:\Users\pa_na\Downloads\{file.Name}"))
+                    //{
+                    //    byteArray = new byte[fs.Length];
+                    //    await fs.WriteAsync(byteArray, 0, (int)fs.Length);
+                    //}
+                    ////await result[i].OpenReadStream().CopyToAsync(fs);
+
+                    ////byteArray = streamToByteArray(fs);
+                    //Image.PictureInByte = byteArray;
+                    //Image.ImagePath = file.Name;
+                    //Images.Add(Image);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+    }
+
+
+    private  async Task RefreshImageList(long productId)
+    {
+        Images.Clear();
+        Images = (await ImageService.GetImagesAsync(productId)).ToList();
+        //this.StateHasChanged();
     }
 }

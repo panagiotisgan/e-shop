@@ -1,0 +1,20 @@
+﻿@inherits ImageComponentBase
+
+<div class="col-12 col-md-6 img-wrap">
+    <img src="@ImagePath" style="width:150px;height:150px;" />
+    <a class="remove-image" @onclick="async()=>await OnDeleteImage()" style="display: inline;">&#215;</a>
+</div>
+
+@code {
+    //[Inject]
+    //protected IImageService ImageService { get; set; }
+    //[Parameter]
+    //public long ProductId { get; set; }
+    //[Parameter]
+    //public string ImagePath { get; set; }
+    //private async Task OnDeleteImage(long Id)
+    //{
+    //    await ImageService.DeleteImageAsync(Id);
+    //}
+
+}

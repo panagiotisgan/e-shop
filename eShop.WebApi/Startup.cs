@@ -30,7 +30,7 @@ namespace eShop.WebApi
         {
             services.AddDbContext<EshopDbContext>();
             services.AddTransient<LoginService, LoginService>();
-            services.AddTransient<IUserRepository, UserRepository>();
+            //services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IOrderDetailsRepository, OrderDetailsRepository>();
             services.AddTransient<ICredentialRepository, CredentialRepository>();

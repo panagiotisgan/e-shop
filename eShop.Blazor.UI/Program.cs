@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using Blazored.Modal;
 using eShop.Blazor.UI.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -28,8 +29,23 @@ namespace eShop.Blazor.UI
              client.BaseAddress = new Uri("https://localhost:44371/"));
             builder.Services.AddHttpClient<ICategoryService, CategoryService>(client =>
                  client.BaseAddress = new Uri("https://localhost:44371/"));
+            builder.Services.AddHttpClient<IImageService, ImageService>(client =>
+                client.BaseAddress = new Uri("https://localhost:44371/"));
+            builder.Services.AddHttpClient<IAuthenticateService, AuthenticateService>(client => 
+            client.BaseAddress = new Uri("https://localhost:44371/"));
+
+            //builder.Services.AddHttpClient<IAuthenticateService, AuthenticateService>(client =>
+            //client.BaseAddress = new Uri("https://localhost:44371/"));
+
+            builder.Services.AddBlazoredLocalStorage();
 
             builder.Services.AddBlazoredModal();
+
+            var host = builder.Build();
+
+            var authService = host.Services.GetRequiredService<IAuthenticateService>();
+
+            await authService.InitializeCookie();
 
             //builder.Services.AddControllersWithViews()
 

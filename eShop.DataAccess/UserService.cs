@@ -13,15 +13,15 @@ namespace eShop.DataAccess
 {
     public class UserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserUnitOfWork _userUnitOfWork;
         private readonly ICredentialRepository _credentialRepository;
         private readonly ICountryRepository _countryRepository;
         private readonly IStateRepository _stateRepository;
         private readonly ICityRepository _cityRepository;
-        public UserService(IUserRepository userRepository, ICredentialRepository credentialRepository,
+        public UserService(IUserUnitOfWork userUnitOfWork, ICredentialRepository credentialRepository,
             ICountryRepository countryRepository, IStateRepository stateRepository, ICityRepository cityRepository)
         {
-            this._userRepository = userRepository;
+            this._userUnitOfWork = userUnitOfWork;
             this._credentialRepository = credentialRepository;
             this._countryRepository = countryRepository;
             this._stateRepository = stateRepository;
@@ -40,7 +40,7 @@ namespace eShop.DataAccess
 
             errors.Clear();
 
-            if (userDTO.Role == Role.Admin && _userRepository.AdminExist())
+            if (userDTO.Role == Role.Admin && _userUnitOfWork.UserDbRepository.AdminExist())
             {
                 errors.Add("Admin already exist in store. Invalid action.");
                 accountErrorsModel.ErrorMessage = errors;
@@ -131,8 +131,8 @@ namespace eShop.DataAccess
                     throw new ArgumentNullException("User cannot be null model");
                 try
                 {
-                    _userRepository.CreateEntity(user);
-                    _userRepository.Save();
+                    _userUnitOfWork.UserDbRepository.CreateEntity(user);
+                    _userUnitOfWork.UserDbRepository.Save();
                 }
                 catch (Exception ex)
                 {
@@ -156,7 +156,7 @@ namespace eShop.DataAccess
         //Tha epistrefei User
         public User UpdateUser(UserUpdateDTO userUpdate)
         {
-            var userToUpd = _userRepository.GetById(userUpdate.UserId);
+            var userToUpd = _userUnitOfWork.UserDbRepository.GetById(userUpdate.UserId);
 
             if (userToUpd == null)
                 throw new ArgumentNullException("Empty User");
@@ -172,8 +172,8 @@ namespace eShop.DataAccess
                 userToUpd.PhoneNumber = userUpdate.PhoneNumber;
                 userToUpd.Country = userUpdate.Country;
 
-                _userRepository.UpdateEntity(userToUpd);
-                _userRepository.Save();
+                _userUnitOfWork.UserDbRepository.UpdateEntity(userToUpd);
+                _userUnitOfWork.UserDbRepository.Save();
 
                 return userToUpd;
             }
@@ -185,13 +185,13 @@ namespace eShop.DataAccess
 
         public int DeleteUser(long userId)
         {
-            var entityForDelete = _userRepository.GetById(userId);
+            var entityForDelete = _userUnitOfWork.UserDbRepository.GetById(userId);
             if (entityForDelete == null)
                 throw new ArgumentNullException("Empty User");
 
-            _userRepository.DeleteEntity(userId);
+            _userUnitOfWork.UserDbRepository.DeleteEntity(userId);
 
-            return _userRepository.Save();
+            return _userUnitOfWork.UserDbRepository.Save();
         }
 
     }

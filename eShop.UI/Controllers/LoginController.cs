@@ -14,11 +14,11 @@ namespace eShop.UI.Controllers
     public class LoginController : Controller
     {
         private readonly ICredentialRepository _credentialRepo;
-        private readonly IUserRepository _userRepo;
-        public LoginController(ICredentialRepository credentialRepo,IUserRepository userRepo)
+        //private readonly IUserRepository _userRepo;
+        public LoginController(ICredentialRepository credentialRepo/*,IUserRepository userRepo*/)
         {
             this._credentialRepo = credentialRepo;
-            this._userRepo = userRepo;
+            //this._userRepo = userRepo;
         }
         [HttpGet]
         public IActionResult UserLogin()

@@ -1,0 +1,23 @@
+﻿@page "/Login"
+@inherits LoginBase
+@*@inject IJSRuntime JSRuntime*@
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-2">
+                <form method="post">
+                    <label class="font-weight-bold">Username</label>
+                    <input class="col-6"  @bind="@Username" type="text"/>
+                    <label class="font-weight-bold">Password</label>
+                    <input class="col-6"  @bind="@Password" type="text"/>
+                    <button class="btn btn-success" @onclick="OnLogin">Login</button>
+                </form>
+        </div>
+    </div>
+</div>
+@code {
+    //public async Task WriteCookieAsync()
+    //{
+    //    var res = await JSRuntime.InvokeAsync<string>("blazorExtension.WriteCookie", "client.cookie", AuthResult.Token, 7);
+    //}
+}

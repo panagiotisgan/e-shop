@@ -1,4 +1,6 @@
 ﻿@page "/products"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 @inherits ProductsBase
 @inject NavigationManager NavigationManager
 
@@ -15,8 +17,8 @@
             <th>Name</th>
             <th>Price</th>
             <th>Stock</th>
-            <th></th>
-            <th></th>
+            <th class="text-center">Edit</th>
+            <th class="text-center">Delete</th>
         </tr>
     </thead>
     @if (Products != null)
@@ -30,9 +32,9 @@
                     <td>@product.Code</td>
                     <td>@product.Name</td>
                     <td>@product.Price</td>
-                    <td>@product.StockQty</td>
-                    <td><span class="fas fa-trash-alt" @onclick="async () => await DeleteProduct(product.Id)"></span></td>
-                    <td><a href="@url"><button class="btn btn-primary">Edit</button></a></td>
+                    <td>@product.StockQty</td>                    
+                    <td class="text-center"><a href="@url"><span class="fas fa-edit"></span></a></td>
+                    <td class="text-center"><span class="fas fa-trash-alt" @onclick="async () => await DeleteProduct(product.Id)"></span></td>
                 </tr>
 
             }

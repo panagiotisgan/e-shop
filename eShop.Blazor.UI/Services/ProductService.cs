@@ -1,4 +1,5 @@
-﻿using eShop.Blazor.UI.Dto_Model;
+﻿using Blazored.LocalStorage;
+using eShop.Blazor.UI.Dto_Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,11 @@ namespace eShop.Blazor.UI.Services
     public class ProductService : IProductService
     {
         private HttpClient _client;
-        public ProductService(HttpClient client)
+        private ILocalStorageService _localStorageService;
+        public ProductService(HttpClient client, ILocalStorageService localStorageService)
         {
             _client = client;
+            _localStorageService = localStorageService;
         }
 
         public async Task CreateOrUpdateProductAsync(Product product)
@@ -55,12 +58,20 @@ namespace eShop.Blazor.UI.Services
             return null;
         }
 
-        public async Task<IEnumerable<Product>> GetProductsAsync()
+        public async Task<IEnumerable<Product>> GetProductsAsync(HttpRequestMessage requestMessage)
         {
-            var result = await _client.GetAsync("api/Products/GetProducts");
-            if (result.IsSuccessStatusCode)
+            var cookie = await _localStorageService.GetItemAsync<AuthenticationResult>("jwt.cookie");
+
+            requestMessage.Method = HttpMethod.Get;
+            requestMessage.RequestUri = new System.Uri("api/Products/GetProducts");
+            requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", cookie.Token);
+
+            var response = await _client.SendAsync(requestMessage); 
+
+            //var result = await _client.GetAsync("api/Products/GetProducts");
+            if (response.IsSuccessStatusCode)
             {
-                var content = await result.Content.ReadAsStringAsync();
+                var content = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<IEnumerable<Product>>(content);
             }
 

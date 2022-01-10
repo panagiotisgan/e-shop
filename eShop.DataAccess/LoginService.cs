@@ -18,14 +18,14 @@ namespace eShop.DataAccess
 {
     public class LoginService : ILoginService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserUnitOfWork _userUnitOfWork;
         private readonly ICredentialRepository _credentialRepository;
         private const string _SECRET = "xVigzSeBiGNefeojZro3";
         //private readonly AppSettings _appSettings;
 
-        public LoginService(IUserRepository userRepository, ICredentialRepository credentialRepository/*,IOptions<AppSettings> appSettings*/)
+        public LoginService(IUserUnitOfWork userUnitOfWork, ICredentialRepository credentialRepository/*,IOptions<AppSettings> appSettings*/)
         {
-            this._userRepository = userRepository;
+            this._userUnitOfWork = userUnitOfWork;
             this._credentialRepository = credentialRepository;
             //this._appSettings = appSettings.Value;
         }
@@ -68,7 +68,7 @@ namespace eShop.DataAccess
                 return (userResult, createAccountErrors);
             }
 
-            var user = _userRepository.GetUserByCredentialId(accountExist.Id);
+            var user = _userUnitOfWork.UserDbRepository.GetUserByCredentialId(accountExist.Id);
 
             if (!user.IsActiveAccount)
             {

@@ -24,26 +24,43 @@ namespace eShop.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("GetByIds/{productIds}")]
-        public async Task<IActionResult> GetByProductIds([FromRoute]string productIds)
+        [Route("GetById/{productId}")]
+        public async Task<IActionResult> GetByProductId([FromRoute] string productId)
         {
-            var productIdArray = JsonConvert.DeserializeObject<long[]>(productIds);
+            Int64.TryParse(productId, out var imageId);
             Images.Clear();
-            foreach (var id in productIdArray)
+            try
             {
-                try
+                var image = await this._imageUnitOfWork.ImageDbRepository.GetImagesByProductIdAsync(imageId);
+                if (image != null)
                 {
-                    long actualId = Convert.ToInt64(id);
-                    var image = await this._imageUnitOfWork.ImageDbRepository.GetImageByProductId(actualId);
-                    if (image != null)
-                        Images.Add(image);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
+                    Images.AddRange(image);
+                    return Ok(Images);
                 }
             }
-            return Ok(Images);
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return NotFound();
+        }
+
+
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(long id)
+        {
+            try
+            {
+                _imageUnitOfWork.ImageDbRepository.DeleteEntity(id);
+                _imageUnitOfWork.Save();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 

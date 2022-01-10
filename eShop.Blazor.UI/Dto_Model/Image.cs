@@ -7,6 +7,7 @@ namespace eShop.Blazor.UI.Dto_Model
 {
     public class Image
     {
+        public long Id { get; set; }
         public long ProductId { get; set; }
         public string ImagePath { get; set; }
         public string TitleAttribute { get; set; }

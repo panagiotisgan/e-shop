@@ -1,5 +1,7 @@
 ﻿@page "/create"
 @page "/createProduct"
+@using System.IO
+@using eShop.Blazor.UI.Dto_Model
 @inherits CreateProductBase
 @inject NavigationManager NavigationManager
 
@@ -36,22 +38,27 @@
 
         </select>
     </div>
-    <div class="form-group col-md-6">
-        <label for="Image">Image</label>
-        <input type="image" class="form-control col-md-6" id="image"/>
+    <div class="row">
+        <div class="form-group col-md-4">
+            <InputFile OnChange="@LoadFiles" multiple />
+        </div>
+        <div class="col-md-6">
+            <img src="@Image.ImagePath" style="width:150px;height:150px;"/>
+        </div>
     </div>
     <button @onclick="async ()=> await OnSubmit()" class="btn btn-primary">Save</button>
     @*<button @onclick="async ()=> await OnCancel()" class="btn btn-danger">Close</button>*@
 </form>
 
-@code{
+@code {
     string Name { get; set; }
     string Code { get; set; }
     decimal Price { get; set; }
     decimal StockQty { get; set; }
     public long CategoryId { get; set; }
     bool InStock { get; set; }
-
+    List<Image> Images = new List<Image>();
+    Image Image { get; set; } = new Image();
 
 
     private async Task OnSubmit()
@@ -59,24 +66,68 @@
         try
         {
             SetProductAvailability();
-            await ProductService.CreateOrUpdateProductAsync(new Dto_Model.Product { Name = Name, Price = Price, StockQty = StockQty, CategoryId = CategoryId, InStock = InStock, Code = Code });
+            await ProductService.CreateOrUpdateProductAsync(new Dto_Model.Product { Name = Name, Price = Price, StockQty = StockQty, CategoryId = CategoryId, InStock = InStock, Code = Code, Images = Images });
             NavigationManager.NavigateTo("products");
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            
+
         }
 
 
     }
 
     private void SetProductAvailability()
+    {
+        if (StockQty > 0)
+            InStock = true;
+        else
+            InStock = false;
+    }
+
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        Images.Clear();
+        var result = e.GetMultipleFiles();
+        if (result.Count > 0)
         {
-            if (StockQty > 0)
-                InStock = true;
-            else
-                InStock = false;
+            for (var i = 0; i <= result.Count - 1; i++)
+            {
+                try
+                {
+                    var file = result[i];
+
+                    byte[] buffer = new byte[result[i].Size];
+
+                    await file.OpenReadStream().ReadAsync(buffer);
+                    Image.ImagePath = $"data:image/png;base64,{Convert.ToBase64String(buffer)}";
+                    Images.Add(Image);
+                    //using (FileStream fs = File.OpenRead(@$"C:\Users\pa_na\Downloads\{file.Name}"))
+                    //{
+                    //    byteArray = new byte[fs.Length];
+                    //    await fs.WriteAsync(byteArray, 0, (int)fs.Length);
+                    //}
+                    ////await result[i].OpenReadStream().CopyToAsync(fs);
+
+                    ////byteArray = streamToByteArray(fs);
+                    //Image.PictureInByte = byteArray;
+                    //Image.ImagePath = file.Name;
+                    //Images.Add(Image);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
         }
+    }
+
+    private static byte[] streamToByteArray(Stream input)
+    {
+        MemoryStream ms = new MemoryStream();
+        input.CopyTo(ms);
+        return ms.ToArray();
+    }
 
     //private async Task OnCancel()
     //{
