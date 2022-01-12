@@ -7,6 +7,7 @@ using eShop.DataAccess.AdditionalDetailsModels;
 using eShop.DataAccess.DTOs;
 using eShop.DataAccess.IRepositories;
 using eShop.Model;
+using eShop.WebApi.Filters;
 using eShop.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,7 @@ namespace eShop.WebApi.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
+        [AuthenticationFilter]
         public IActionResult Authenticate([FromBody]AuthenticateCredentials authenticateModel)
         {
             var isAuthenticate = _loginService.PasswordSignIn(authenticateModel.UserName, authenticateModel.Password, authenticateModel.IsHuman);

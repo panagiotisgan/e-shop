@@ -42,22 +42,22 @@ namespace eShop.DataAccess
             const string ERROR_MSG = "Invalid Username or password.Try again!";
             string errorMsg = null;
 
-            if (!isHuman)
-            {
-                createAccountErrors.ErrorMessage.Add(ERROR_MSG);
-                createAccountErrors.IsValid = false;
-                return (userResult, createAccountErrors);
-            }
+            //if (!isHuman)
+            //{
+            //    createAccountErrors.ErrorMessage.Add(ERROR_MSG);
+            //    createAccountErrors.IsValid = false;
+            //    return (userResult, createAccountErrors);
+            //}
 
-            if (String.IsNullOrWhiteSpace(password))
-            {
-                if (errorMsg == null)
-                    errorMsg = ERROR_MSG;
+            //if (String.IsNullOrWhiteSpace(password))
+            //{
+            //    if (errorMsg == null)
+            //        errorMsg = ERROR_MSG;
 
-                createAccountErrors.ErrorMessage.Add(ERROR_MSG);
-                createAccountErrors.IsValid = false;
-                return (userResult, createAccountErrors);
-            }
+            //    createAccountErrors.ErrorMessage.Add(ERROR_MSG);
+            //    createAccountErrors.IsValid = false;
+            //    return (userResult, createAccountErrors);
+            //}
 
             var accountExist = _credentialRepository.GetByName(username);
             if (accountExist == null)
