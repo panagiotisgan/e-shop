@@ -15,23 +15,24 @@ namespace eShop.WebApi.Filters
             var authenticationModel = context.ActionArguments["authenticateModel"] as AuthenticateCredentials;
             if(String.IsNullOrWhiteSpace(authenticationModel.Password))
             {
-                context.ModelState.AddModelError("Password", "Password is required.");
-                context.Result = new BadRequestObjectResult(context);
-
+                //context.ModelState.AddModelError("Password", "Password is required.");
+                context.Result = new BadRequestObjectResult("Password is required.");
+                return;
             }
 
             if (String.IsNullOrWhiteSpace(authenticationModel.UserName))
             {
-                context.ModelState.AddModelError("Username", "Username is required.");
-                context.Result = new BadRequestObjectResult(context);
+                //context.ModelState.AddModelError("Username", "Username is required.");
+                context.Result = new BadRequestObjectResult("Username is required.");
+                return;
 
             }
 
             if (!authenticationModel.IsHuman)
             {
-                context.ModelState.AddModelError("IsHuman", "Please verify that you are an actual user.");
-                context.Result = new BadRequestObjectResult(context);
-
+                //context.ModelState.AddModelError("IsHuman", "Please verify that you are an actual user.");
+                context.Result = new BadRequestObjectResult("Please verify that you are an actual user.");
+                return;
             }
         }
     }

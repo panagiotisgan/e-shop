@@ -6,6 +6,7 @@ using eShop.DataAccess;
 using eShop.DataAccess.AdditionalDetailsModels;
 using eShop.DataAccess.DTOs;
 using eShop.DataAccess.IRepositories;
+using eShop.DataAccess.IServices;
 using eShop.Model;
 using eShop.WebApi.Filters;
 using eShop.WebApi.Models;
@@ -19,10 +20,10 @@ namespace eShop.WebApi.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly LoginService _loginService;
+        private readonly ILoginService _loginService;
         private readonly IUserUnitOfWork _userUnitOfWork;
        //public HttpContext _httpContext;
-        public UsersController(IUserUnitOfWork _userUnitOfWork, LoginService loginService/*, HttpContext httpContext*/)
+        public UsersController(IUserUnitOfWork _userUnitOfWork, ILoginService loginService/*, HttpContext httpContext*/)
         {
             //this._loginService = loginService;
             this._userUnitOfWork = _userUnitOfWork;
@@ -66,7 +67,8 @@ namespace eShop.WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("AddUser")]
+        [HttpPost("AccountCreate")]
+        [CreateAccountFilter] //Otan exw to filter den ftanei to request
         public IActionResult CreateUser([FromBody] UserDTO user)
         {
             return null;

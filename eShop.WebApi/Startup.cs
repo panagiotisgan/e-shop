@@ -1,11 +1,13 @@
 using eShop.DataAccess;
 using eShop.DataAccess.IRepositories;
+using eShop.DataAccess.IServices;
 using eShop.DataAccess.Repositories;
 using eShop.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,7 +31,7 @@ namespace eShop.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<EshopDbContext>();
-            services.AddTransient<LoginService, LoginService>();
+            services.AddScoped<ILoginService, LoginService>();
             //services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IOrderDetailsRepository, OrderDetailsRepository>();
@@ -41,6 +43,7 @@ namespace eShop.WebApi
             //services.AddTransient<IProductRepository, ProductRepository>();
             services.AddUnitOfWorkServices();
             services.AddRepositoriesServices();
+                        
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

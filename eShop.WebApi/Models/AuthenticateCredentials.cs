@@ -8,7 +8,7 @@ namespace eShop.WebApi.Models
 {
     public class AuthenticateCredentials
     {
-        [Required]
+        //[Required]
         public string UserName { get; set; }
         [Required]
         public string Password { get; set; }
