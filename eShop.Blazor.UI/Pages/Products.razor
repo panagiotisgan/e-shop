@@ -1,8 +1,9 @@
 ﻿@page "/products"
-@using Microsoft.AspNetCore.Authorization
-@attribute [Authorize]
+
 @inherits ProductsBase
 @inject NavigationManager NavigationManager
+
+@attribute [Authorize]
 
 <h3>Products List</h3>
 <div class="row">

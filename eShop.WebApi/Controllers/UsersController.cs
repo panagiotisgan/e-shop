@@ -8,6 +8,7 @@ using eShop.DataAccess.DTOs;
 using eShop.DataAccess.IRepositories;
 using eShop.DataAccess.IServices;
 using eShop.Model;
+using eShop.WebApi.Auth;
 using eShop.WebApi.Filters;
 using eShop.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -22,53 +23,32 @@ namespace eShop.WebApi.Controllers
     {
         private readonly ILoginService _loginService;
         private readonly IUserUnitOfWork _userUnitOfWork;
-       //public HttpContext _httpContext;
-        public UsersController(IUserUnitOfWork _userUnitOfWork, ILoginService loginService/*, HttpContext httpContext*/)
+        private readonly ICustomManager _jwtTokenManager;
+        public UsersController(IUserUnitOfWork _userUnitOfWork, ILoginService loginService, ICustomManager jwtTokenManager)
         {
-            //this._loginService = loginService;
             this._userUnitOfWork = _userUnitOfWork;
             this._loginService = loginService;
-            //this._httpContext = httpContext;
-        }
+            this._jwtTokenManager = jwtTokenManager;
+        }        
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
-        [AuthenticationFilter]
-        public IActionResult Authenticate([FromBody]AuthenticateCredentials authenticateModel)
+        [HttpPost("authentication")]
+        public async Task<IActionResult> Authentication([FromBody] AuthenticateCredentials authenticateModel)
         {
-            var isAuthenticate = _loginService.PasswordSignIn(authenticateModel.UserName, authenticateModel.Password, authenticateModel.IsHuman);
+            var isCorrect = await this._loginService.CheckCredentials(authenticateModel.UserName, authenticateModel.Password, authenticateModel.IsHuman);
+            string jwtToken = string.Empty;
+            if (isCorrect)
+                jwtToken = _jwtTokenManager.CreateToken(authenticateModel.UserName);
 
-            AuthenticationResultDTO authenticatedUserResult = new AuthenticationResultDTO();
+            if (string.IsNullOrWhiteSpace(jwtToken))
+                return NoContent();//set information about wrong credentials
 
-            if (!isAuthenticate.accountErrors.IsValid && isAuthenticate.accountErrors.ErrorMessage.Contains("You have receive an verification link in your email.Please activate your account."))
-            {
-                authenticatedUserResult.IsAuthenticated = false;
-                authenticatedUserResult.ErrorMessage = "You have receive an verification link in your email.Please activate your account.";
-                return BadRequest(authenticatedUserResult);
-            }
-
-
-            if (!isAuthenticate.accountErrors.IsValid && !isAuthenticate.accountErrors.ErrorMessage.Contains("You have receive an verification link in your email.Please activate your account."))
-            {
-                authenticatedUserResult.ErrorMessage = "Username or Password is incorrect";
-                authenticatedUserResult.IsAuthenticated = false;
-                return BadRequest(authenticatedUserResult);
-            }
-                       
-            authenticatedUserResult.UserId = isAuthenticate.user.UserId;
-            authenticatedUserResult.Token = isAuthenticate.user.Token;
-            authenticatedUserResult.Role = isAuthenticate.user.Role;
-            authenticatedUserResult.IsAuthenticated = true;
-            authenticatedUserResult.ErrorMessage = null;
-
-            //_httpContext.Session.SetString("JWToken", isAuthenticate.user.Token);
-
-            return Ok(authenticatedUserResult);
+            return Ok(jwtToken);
         }
 
         [AllowAnonymous]
         [HttpPost("AccountCreate")]
-        [CreateAccountFilter] //Otan exw to filter den ftanei to request
+        //[CreateAccountFilter] //Otan exw to filter den ftanei to request
         public IActionResult CreateUser([FromBody] UserDTO user)
         {
             return null;

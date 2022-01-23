@@ -26,7 +26,6 @@ namespace eShop.WebApi.Controllers
             this._imageUnitOfWork = _imageUnitOfWork;
         }
 
-        [Authorize]
         [HttpGet]
         [Route("GetProducts")]
         public async Task<IActionResult> GetProducts()

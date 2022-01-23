@@ -58,20 +58,20 @@ namespace eShop.Blazor.UI.Services
             return null;
         }
 
-        public async Task<IEnumerable<Product>> GetProductsAsync(HttpRequestMessage requestMessage)
+        public async Task<IEnumerable<Product>> GetProductsAsync()
         {
             var cookie = await _localStorageService.GetItemAsync<AuthenticationResult>("jwt.cookie");
 
-            requestMessage.Method = HttpMethod.Get;
-            requestMessage.RequestUri = new System.Uri("api/Products/GetProducts");
-            requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", cookie.Token);
+            //requestMessage.Method = HttpMethod.Get;
+            //requestMessage.RequestUri = new System.Uri("api/Products/GetProducts");
+            //requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", cookie.Token);
 
-            var response = await _client.SendAsync(requestMessage); 
+            //var response = await _client.SendAsync(requestMessage); 
 
-            //var result = await _client.GetAsync("api/Products/GetProducts");
-            if (response.IsSuccessStatusCode)
+            var result = await _client.GetAsync("api/Products/GetProducts");
+            if (result.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
+                var content = await result.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<IEnumerable<Product>>(content);
             }
 

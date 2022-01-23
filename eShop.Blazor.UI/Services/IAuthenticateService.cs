@@ -5,7 +5,6 @@ namespace eShop.Blazor.UI.Services
 {
     public interface IAuthenticateService
     {
-        Task AuthenticateAsync(string Username, string Password);
-        Task InitializeCookie();
+        Task<string> AuthenticateAsync(string Username, string Password);
     }
 }

@@ -1,23 +1,41 @@
 ﻿@page "/Login"
-@inherits LoginBase
+
+@inject NavigationManager navManager
+@*@inherits LoginBase*@
 @*@inject IJSRuntime JSRuntime*@
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 col-md-2">
-                <form method="post">
-                    <label class="font-weight-bold">Username</label>
-                    <input class="col-6"  @bind="@Username" type="text"/>
-                    <label class="font-weight-bold">Password</label>
-                    <input class="col-6"  @bind="@Password" type="text"/>
-                    <button class="btn btn-success" @onclick="OnLogin">Login</button>
-                </form>
+            <form method="post">
+                <label class="font-weight-bold">Username</label>
+                <input class="col-6" @bind="@Username" type="text" />
+                <label class="font-weight-bold">Password</label>
+                <input class="col-6" @bind="@Password" type="text" />
+                <button class="btn btn-success" @onclick="OnLogin">Login</button>
+            </form>
         </div>
     </div>
 </div>
 @code {
-    //public async Task WriteCookieAsync()
-    //{
-    //    var res = await JSRuntime.InvokeAsync<string>("blazorExtension.WriteCookie", "client.cookie", AuthResult.Token, 7);
-    //}
+    AlertComponent alertComponent;
+    [Parameter]
+    public string Username { get; set; }
+    [Parameter]
+    public string Password { get; set; }
+    [Inject]
+    protected IAuthenticateService authService { get; set; }    
+
+    async Task OnLogin()
+    {
+
+        var result = await authService.AuthenticateAsync(Username, Password);
+        if (string.IsNullOrWhiteSpace(result)){
+            //alertComponent.ErrorMessage = "Failed to login";
+            //alertComponent.Show();
+            navManager.NavigateTo("/");
+        }
+
+        navManager.NavigateTo("/products",true);
+    }
 }

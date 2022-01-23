@@ -20,15 +20,15 @@ namespace eShop.Blazor.UI.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            _httpRequest = new HttpRequestMessage();
-            Products = (await ProductService.GetProductsAsync(_httpRequest)).ToList();
+            //_httpRequest = new HttpRequestMessage();
+            Products = (await ProductService.GetProductsAsync()).ToList();
         }
 
         public async Task DeleteProduct(long productId)
         {
-            _httpRequest = new HttpRequestMessage();
+            //_httpRequest = new HttpRequestMessage();
             await ProductService.DeleteProduct(productId);
-            Products = (await ProductService.GetProductsAsync(_httpRequest)).ToList();
+            Products = (await ProductService.GetProductsAsync()).ToList();
         }       
     }
 }
