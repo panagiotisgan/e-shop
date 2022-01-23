@@ -1,8 +1,10 @@
 ﻿using eShop.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace eShop.DataAccess
 {
@@ -17,15 +19,15 @@ namespace eShop.DataAccess
             return this._context.Users.Any(x => x.Role == Role.Admin);
         }
 
-        public User GetUserByCredentialId(long id)
+        public async Task<User> GetUserByCredentialId(long id)
         {
-            return this._context.Users.FirstOrDefault(x=>x.CredentialId == id);
+            return await this._context.Users.FirstOrDefaultAsync(x=>x.CredentialId == id);
         }
     }
 
     public interface IUserDbRepository : IDbRepository<eShop.Model.User>, IUserRepository
     {
         bool AdminExist();
-        User GetUserByCredentialId(long id);
+        Task<User> GetUserByCredentialId(long id);
     }
 }
