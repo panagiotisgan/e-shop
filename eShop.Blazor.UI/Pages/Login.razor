@@ -1,22 +1,62 @@
 ﻿@page "/Login"
+@using eShop.Blazor.UI.Dto_Model
 
 @inject NavigationManager navManager
-@*@inherits LoginBase*@
-@*@inject IJSRuntime JSRuntime*@
+@inject IJSRuntime jsRuntime
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12 col-md-2">
-            <form method="post">
-                <label class="font-weight-bold">Username</label>
-                <input class="col-6" @bind="@Username" type="text" />
-                <label class="font-weight-bold">Password</label>
-                <input class="col-6" @bind="@Password" type="text" />
-                <button class="btn btn-success" @onclick="OnLogin">Login</button>
-            </form>
+@if (ShowAuthenticationError)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>@AuthenticationErrorText</p>
+    </div>
+}
+
+<EditForm Model="userModel" OnValidSubmit="OnLogin" class="card card-body m-3">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group row">
+        <label for="email" class="col-md-2 col-form-label">Username</label>
+        <div class="col-md-10">
+            <InputText id="username" class="form-control" @bind-Value="@userModel.Username" />
+            <ValidationMessage For="@(()=>userModel.Username)" />
         </div>
     </div>
-</div>
+    <div class="form-group row">
+        <label for="password" class="col-md-2 col-form-label">Password</label>
+        <div class="col-md-10">
+            <InputText id="password" class="form-control" @bind-Value="@userModel.Password" />
+            <ValidationMessage For="@(()=>userModel.Password)" />
+        </div>
+    </div>
+
+    <div class="form-check row">
+        <label for="isHuman" class="col-md-2 form-check-label">I'm not a robot.</label>
+        <div>
+            <InputCheckbox id="isHuman" class="form-check-input" @bind-Value="@userModel.IsHuman" @onchange="CheckBoxClicked"/>
+            <ValidationMessage For="@(()=>userModel.IsHuman)" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 text-right">
+            <button type="submit" class="btn btn-success">Log in</button>
+        </div>
+    </div>
+</EditForm>
+
+@*<div class="container-fluid">
+    <div class="row">
+    <div class="col-12 col-md-2">
+    <form method="post">
+    <label class="font-weight-bold">Username</label>
+    <input class="col-6" @bind="@Username" type="text" />
+    <label class="font-weight-bold">Password</label>
+    <input class="col-6" @bind="@Password" type="text" />
+    <button class="btn btn-success" @onclick="OnLogin">Login</button>
+    </form>
+    </div>
+    </div>
+    </div>*@
 @code {
     AlertComponent alertComponent;
     [Parameter]
@@ -24,18 +64,62 @@
     [Parameter]
     public string Password { get; set; }
     [Inject]
-    protected IAuthenticateService authService { get; set; }    
+    protected IAuthenticationService authService { get; set; }
+    private AuthenticationUserModel userModel = new();
+    private string AuthenticationErrorText = "";
+    private bool ShowAuthenticationError = false;
 
-    async Task OnLogin()
+
+    EventCallback<bool> UpdateCheckBox { get; set; }
+
+    //protected override Task OnInitializedAsync()
+    //{
+    //    userModel.IsHuman = false;
+    //    return base.OnInitializedAsync();
+    //}
+
+
+    void CheckBoxClicked()
     {
-
-        var result = await authService.AuthenticateAsync(Username, Password);
-        if (string.IsNullOrWhiteSpace(result)){
-            //alertComponent.ErrorMessage = "Failed to login";
-            //alertComponent.Show();
-            navManager.NavigateTo("/");
+        if (userModel.IsHuman)
+        {
+            userModel.IsHuman = false;
+            Console.WriteLine($"Value:{userModel.IsHuman}");    
         }
+        else
+        {
+            userModel.IsHuman = true;
+            Console.WriteLine($"Value:{userModel.IsHuman}");    
+        }
+    }
 
-        navManager.NavigateTo("/products",true);
+    private async Task OnLogin()
+    {
+        ShowAuthenticationError = false;
+
+        //userModel = new AuthenticationUserModel();
+        //userModel.Username = Username;
+        //userModel.Password = Password;
+
+
+
+        AuthenticatedUserModel result = await authService.Login(userModel);
+        //if (string.IsNullOrWhiteSpace(result)){
+        //    //alertComponent.ErrorMessage = "Failed to login";
+        //    //alertComponent.Show();
+        //    navManager.NavigateTo("/");
+        //}
+
+        if (result != null)
+        {
+            //await jsRuntime.InvokeAsync<string>("localStorage.setItem", "jwt_token", result);
+            //localStorage.SetItemAsync<string>("jwt_token", result);
+            navManager.NavigateTo("/products", true);
+        }
+        else
+        {
+            AuthenticationErrorText = "An error occure during the log in process";
+            ShowAuthenticationError = true;
+        }
     }
 }

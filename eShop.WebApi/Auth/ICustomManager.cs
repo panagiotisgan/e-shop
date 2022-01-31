@@ -1,8 +1,11 @@
-﻿namespace eShop.WebApi.Auth
+﻿
+using System.Threading.Tasks;
+
+namespace eShop.WebApi.Auth
 {
     public interface ICustomManager
     {
-        string CreateToken(string username);
+        Task<string> CreateToken(string username);
         void ResetToken();
         bool VerifyToken(string token);
         string GetUserByToken(string token);

@@ -24,11 +24,12 @@ namespace eShop.Blazor.UI
 
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddOptions();
+            builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddAuthorizationCore();
 
-
-            builder.Services.AddSingleton<ITokenRepository, TokenRepository>();
-            builder.Services.AddSingleton<AuthenticationStateProvider, JwtTokenAuthenticationStateProvider>();
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            //builder.Services.AddSingleton<ITokenRepository, TokenRepository>();
+            builder.Services.AddScoped<AuthenticationStateProvider, JwtTokenAuthenticationStateProvider>();
             builder.Services.AddSingleton<IWebApiHelper>(p =>
             new WebApiHelper(
                 new HttpClient(),
@@ -44,13 +45,10 @@ namespace eShop.Blazor.UI
                  client.BaseAddress = new Uri("https://localhost:44371/"));
             builder.Services.AddHttpClient<IImageService, ImageService>(client =>
                 client.BaseAddress = new Uri("https://localhost:44371/"));
-            builder.Services.AddHttpClient<IAuthenticateService, AuthenticateService>(client => 
-            client.BaseAddress = new Uri("https://localhost:44371/"));
-
-            //builder.Services.AddHttpClient<IAuthenticateService, AuthenticateService>(client =>
+            //builder.Services.AddHttpClient<IAuthenticateService, AuthenticateService>(client => 
             //client.BaseAddress = new Uri("https://localhost:44371/"));
 
-            builder.Services.AddBlazoredLocalStorage();
+            
 
             builder.Services.AddBlazoredModal();
 

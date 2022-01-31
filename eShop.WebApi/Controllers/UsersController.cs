@@ -33,14 +33,14 @@ namespace eShop.WebApi.Controllers
 
         [AllowAnonymous]
         [HttpPost("authentication")]
-        public async Task<IActionResult> Authentication([FromBody] AuthenticateCredentials authenticateModel)
+        public async Task<IActionResult> Authentication([FromForm] AuthenticateCredentials authenticateModel)
         {
             var isCorrect = await this._loginService.CheckCredentials(authenticateModel.UserName, authenticateModel.Password, authenticateModel.IsHuman);
-            string jwtToken = string.Empty;
+            string jwtToken = null;
             if (isCorrect)
-                jwtToken = _jwtTokenManager.CreateToken(authenticateModel.UserName);
+                jwtToken = await _jwtTokenManager.CreateToken(authenticateModel.UserName);
 
-            if (string.IsNullOrWhiteSpace(jwtToken))
+            if (string.IsNullOrEmpty(jwtToken))
                 return NoContent();//set information about wrong credentials
 
             return Ok(jwtToken);

@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using eShop.DataAccess;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace eShop.WebApi.Auth
 {
@@ -12,23 +14,29 @@ namespace eShop.WebApi.Auth
     {
         private readonly IConfiguration configuration;
         private JwtSecurityTokenHandler _jwtTokenHandler;
+        private readonly IUserUnitOfWork _userUnitOfWork;//Tha prepei na fugei kai na mpei kapoios CacheMemory mhxanismos gia na mhn xtupaw ksana to API, 8elw ton xrhsth gia na valw sta CLAIMS ki alla
         private byte[] secretKey;
 
-        public JwtTokenManager(IConfiguration configuration)
+        public JwtTokenManager(IConfiguration configuration, IUserUnitOfWork userUnitOfWork)
         {
             this.configuration = configuration;
             _jwtTokenHandler = new JwtSecurityTokenHandler();
             secretKey = Encoding.ASCII.GetBytes(configuration.GetValue<string>("JwtTokenKey"));
+            _userUnitOfWork = userUnitOfWork;
         }
 
-        public string CreateToken(string username)
+        public async Task<string> CreateToken(string username)
         {
+            var user = await _userUnitOfWork.UserDbRepository.GetUserByUserName(username);
+
             var jwtSecurityToken = new SecurityTokenDescriptor
             {
 
-                Subject = new ClaimsIdentity(
+               Subject = new ClaimsIdentity(
                new Claim[] {
-                   new Claim(ClaimTypes.Name, username)
+                   new Claim(ClaimTypes.Name, username),
+                   new Claim(ClaimTypes.Role, user.Role),
+                   new Claim(ClaimTypes.Email, user.Email)
                }
                //new Claim(ClaimTypes.Role, user.Role)
                ),

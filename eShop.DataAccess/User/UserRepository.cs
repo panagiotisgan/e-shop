@@ -23,11 +23,18 @@ namespace eShop.DataAccess
         {
             return await this._context.Users.FirstOrDefaultAsync(x=>x.CredentialId == id);
         }
+
+        public async Task<User> GetUserByUserName(string userName)
+        {
+            var credentials = await _context.Credentials.FirstOrDefaultAsync(x => x.Username == userName);
+            return await this._context.Users.FirstOrDefaultAsync(u=>u.CredentialId==credentials.Id);
+        }
     }
 
     public interface IUserDbRepository : IDbRepository<eShop.Model.User>, IUserRepository
     {
         bool AdminExist();
         Task<User> GetUserByCredentialId(long id);
+        Task<User> GetUserByUserName(string userName);
     }
 }
