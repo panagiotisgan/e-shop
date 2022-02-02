@@ -59,6 +59,8 @@
     <Compile Remove="Migrations\20201215125714_151220.Designer.cs" />
     <Compile Remove="Migrations\20211128210546_updateImageTable.cs" />
     <Compile Remove="Migrations\20211128210546_updateImageTable.Designer.cs" />
+    <Compile Remove="Migrations\20220202145750_Credentials_Update.cs" />
+    <Compile Remove="Migrations\20220202145750_Credentials_Update.Designer.cs" />
     <Compile Remove="Repositories\ProductRepository.cs" />
   </ItemGroup>
 
