@@ -21,18 +21,18 @@ namespace eShop.DataAccess
     public class LoginService : ILoginService
     {
         private readonly IUserUnitOfWork _userUnitOfWork;
-        private readonly ICredentialRepository _credentialRepository;
+        private readonly ICredentialUnitOfWork _credentialUnitOfWork;
         private const string _SECRET = "xVigzSeBiGNefeojZro3";
 
-        public LoginService(IUserUnitOfWork userUnitOfWork, ICredentialRepository credentialRepository)
+        public LoginService(IUserUnitOfWork userUnitOfWork, ICredentialUnitOfWork credentialUnitOfWork)
         {
             this._userUnitOfWork = userUnitOfWork;
-            this._credentialRepository = credentialRepository;
+            _credentialUnitOfWork = credentialUnitOfWork;
         }
     
         public async Task<bool> CheckCredentials(string username, string password, bool isHuman)
         {
-            var accountExist = _credentialRepository.GetByName(username);
+            var accountExist = _credentialUnitOfWork .CredentialDbRepository.GetByName(username);
             if (accountExist == null) 
                 return false;            
 

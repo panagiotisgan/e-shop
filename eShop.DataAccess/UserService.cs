@@ -14,19 +14,19 @@ namespace eShop.DataAccess
     public class UserService
     {
         private readonly IUserUnitOfWork _userUnitOfWork;
-        private readonly ICredentialRepository _credentialRepository;
+        private readonly ICredentialUnitOfWork _credentialUnitOfWork;
         private readonly ICountryRepository _countryRepository;
         private readonly IStateRepository _stateRepository;
         private readonly ICityRepository _cityRepository;
-        public UserService(IUserUnitOfWork userUnitOfWork, ICredentialRepository credentialRepository,
-            ICountryRepository countryRepository, IStateRepository stateRepository, ICityRepository cityRepository)
+        public UserService(IUserUnitOfWork userUnitOfWork, ICredentialUnitOfWork _credentialUnitOfWork,
+            ICountryRepository countryRepository, IStateRepository stateRepository, ICityRepository cityRepository, ICredentialUnitOfWork credentialUnitOfWork)
         {
             this._userUnitOfWork = userUnitOfWork;
-            this._credentialRepository = credentialRepository;
             this._countryRepository = countryRepository;
             this._stateRepository = stateRepository;
             this._cityRepository = cityRepository;
-        }        
+            this._credentialUnitOfWork = credentialUnitOfWork;
+        }
 
         public List<string> CreateUser(UserDTO userDTO, long countryId, long stateId, long cityId)
         {
@@ -47,7 +47,7 @@ namespace eShop.DataAccess
                 accountErrorsModel.IsValid = false;
             }
 
-            if (_credentialRepository.NameExist(userDTO.Username))
+            if (_credentialUnitOfWork.CredentialDbRepository.NameExist(userDTO.Username))
             {
                 errors.Add("Username Already Exist");
                 accountErrorsModel.ErrorMessage = errors;
@@ -99,8 +99,8 @@ namespace eShop.DataAccess
 
                 try
                 {
-                    _credentialRepository.CreateEntity(credential);
-                    var result = _credentialRepository.Save();
+                    _credentialUnitOfWork.CredentialDbRepository.CreateEntity(credential);
+                    var result = _credentialUnitOfWork.CredentialDbRepository.Save();
                 }
                 catch (Exception ex)
                 {
@@ -136,8 +136,8 @@ namespace eShop.DataAccess
                 }
                 catch (Exception ex)
                 {
-                    _credentialRepository.DeleteEntity(credential.Id);
-                    _credentialRepository.Save();
+                    _credentialUnitOfWork.CredentialDbRepository.DeleteEntity(credential.Id);
+                    _credentialUnitOfWork.CredentialDbRepository.Save();
                     throw new Exception(ex.Message);
                 }
 

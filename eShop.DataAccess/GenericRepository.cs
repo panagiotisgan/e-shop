@@ -19,9 +19,6 @@ namespace eShop.DataAccess
             this._context = context;
         }
 
-        //prosorina tha fugei meta ta test
-        //EshopDbContext _context = new EshopDbContext();
-
         public IEnumerable<TEntity> GetAll()
         {
             return _context.Set<TEntity>().ToList();

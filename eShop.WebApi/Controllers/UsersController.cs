@@ -16,20 +16,22 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eShop.WebApi.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly ILoginService _loginService;
         private readonly IUserUnitOfWork _userUnitOfWork;
+        private readonly ICredentialUnitOfWork _credentialUnitOfWork;
         private readonly ICustomManager _jwtTokenManager;
-        public UsersController(IUserUnitOfWork _userUnitOfWork, ILoginService loginService, ICustomManager jwtTokenManager)
+        public UsersController(IUserUnitOfWork _userUnitOfWork, ILoginService loginService, ICustomManager jwtTokenManager, ICredentialUnitOfWork credentialUnitOfWork)
         {
             this._userUnitOfWork = _userUnitOfWork;
             this._loginService = loginService;
             this._jwtTokenManager = jwtTokenManager;
-        }        
+            _credentialUnitOfWork = credentialUnitOfWork;
+        }
 
         [AllowAnonymous]
         [HttpPost("authentication")]
@@ -51,6 +53,46 @@ namespace eShop.WebApi.Controllers
         //[CreateAccountFilter] //Otan exw to filter den ftanei to request
         public IActionResult CreateUser([FromBody] UserDTO user)
         {
+            if (user == null)
+                return BadRequest();
+
+            User actualUser = new User();
+
+            try
+            {
+                if (!String.IsNullOrWhiteSpace(user.Password))
+                {
+                    var response = PasswordService.CreatePassword(user.Password);
+
+                    Credential credential = new Credential()
+                    {
+                        Password = response.password,
+                        Salt = response.salt,
+                        Username = user.Username
+                    };
+
+                    actualUser.Email = user.Email;
+                    actualUser.FirstName = user.FirstName;
+                    actualUser.LastName = user.LastName;
+                    actualUser.PhoneNumber = user.PhoneNumber;
+                    actualUser.Role = user.Role; ;
+                    actualUser.VATNumber = user.VATNumber;
+                    actualUser.ZipCode = user.ZipCode;
+                    actualUser.AddressNo1 = user.AddressNo1;
+                    actualUser.Country = user.Country;
+                    actualUser.Credential = credential;
+                    actualUser.IsActiveAccount = true;
+                    actualUser.CityName = user.CityName;
+                    actualUser.StateName = user.StateName;
+
+                    _credentialUnitOfWork.CredentialDbRepository.CreateEntity(credential);
+                    _userUnitOfWork.UserDbRepository.CreateEntity(actualUser);
+                    _userUnitOfWork.Save();
+                }
+            }
+            catch (Exception ex) { }
+
+
             return null;
         }
 

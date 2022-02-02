@@ -5,17 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace eShop.DataAccess.Repositories
+namespace eShop.DataAccess
 {
-    public class CredentialRepository : GenericRepository<Credential,EshopDbContext>,ICredentialRepository
+    public class CredentialRepository : GenericRepository<Credential,EshopDbContext>, ICredentialDbRepository
     {
         public CredentialRepository(EshopDbContext context) : base(context)
         {
 
         }
-
-        //Προσωρινα μετα τα Τεστ θα φύγει
-        //EshopDbContext _context = new EshopDbContext();
 
         public Credential GetByName(string name)
         {
@@ -28,5 +25,11 @@ namespace eShop.DataAccess.Repositories
         {
             return this._context.Credentials.Any(c => c.Username.Equals(name));
         }
+    }
+
+    public interface ICredentialDbRepository : IDbRepository<Credential>, ICredentialRepository
+    {
+        Credential GetByName(string name);
+        bool NameExist(string name);
     }
 }

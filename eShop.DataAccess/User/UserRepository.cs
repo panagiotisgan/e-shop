@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace eShop.DataAccess
 {
-    public class UserRepository : GenericRepository<eShop.Model.User, EshopDbContext>, IUserDbRepository
+    public class UserRepository : GenericRepository<User, EshopDbContext>, IUserDbRepository
     {
         public UserRepository(EshopDbContext context) : base(context)
         {

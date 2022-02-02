@@ -38,7 +38,7 @@ namespace eShop.WebApi
             //services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IOrderDetailsRepository, OrderDetailsRepository>();
-            services.AddTransient<ICredentialRepository, CredentialRepository>();
+            //services.AddTransient<ICredentialRepository, CredentialRepository>();
             services.AddTransient<ICountryRepository, CountryRepository>();
             services.AddTransient<IStateRepository, StateRepository>();
             services.AddTransient<ICityRepository, CityRepository>();

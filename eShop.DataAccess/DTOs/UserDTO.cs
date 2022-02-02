@@ -25,6 +25,8 @@ namespace eShop.DataAccess.DTOs
         public string AddressNo2 { get; set; }
         public string ZipCode { get; set; }
         public string Role { get; set; }
+        public string CityName { get; set; }
+        public string StateName { get; set; }
         public Country Country { get; set; }
         #endregion User Details
     }
