@@ -37,11 +37,11 @@ namespace eShop.WebApi.Auth
                    new Claim(ClaimTypes.Name, username),
                    new Claim(ClaimTypes.Role, user.Role),
                    new Claim(ClaimTypes.Email, user.Email)
-               }
+               }               
                //new Claim(ClaimTypes.Role, user.Role)
                ),
-                Expires = DateTime.UtcNow.AddMinutes(2),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature)
+                Expires = DateTime.UtcNow.AddHours(2).AddMinutes(2),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature)                
             };
 
             var token = _jwtTokenHandler.CreateToken(jwtSecurityToken);
@@ -71,7 +71,7 @@ namespace eShop.WebApi.Auth
 
             try
             {
-                _jwtTokenHandler.ValidateToken(token.Replace("\"", string.Empty), new TokenValidationParameters
+                _jwtTokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateAudience = false,
                     ValidateIssuer = false,

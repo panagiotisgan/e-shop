@@ -1,6 +1,7 @@
 ﻿using eShop.DataAccess;
 using eShop.DataAccess.IRepositories;
 using eShop.Model;
+using eShop.WebApi.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -28,6 +29,7 @@ namespace eShop.WebApi.Controllers
 
         [HttpGet]
         [Route("GetProducts")]
+        [AuthorizationFilter]
         public async Task<IActionResult> GetProducts()
         {
             var products = await this._productUnitOfWork.ProductRepository.GetAllAsync();

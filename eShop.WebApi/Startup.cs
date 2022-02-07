@@ -60,7 +60,8 @@ namespace eShop.WebApi
                         ValidateIssuer = false,
                         ValidateAudience = false,
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("OVZ0ufrJRt7T6g06qE9BLE91cll3MwZSHXnFJP"))
+                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("OVZ0ufrJRt7T6g06qE9BLE91cll3MwZSHXnFJP")),
+                        ClockSkew = TimeSpan.Zero
                     };
                 });
 
