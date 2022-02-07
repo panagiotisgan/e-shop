@@ -2,6 +2,7 @@
 @using eShop.Blazor.UI.Components
 @using eShop.Blazor.UI.Dto_Model
 @inject NavigationManager navigationManager
+@inject IProductViewModel productVM
 
 @*TO DO add update form to display and change product Data*@
 <form method="post">
@@ -76,8 +77,8 @@
 @code {
     [Parameter]
     public string Value { get; set; }
-    [Inject]
-    protected IProductService ProductService { get; set; }
+    //[Inject]
+    //protected IProductService ProductService { get; set; }
     [Inject]
     protected ICategoryService CategoryService { get; set; }
     [Inject]
@@ -109,7 +110,7 @@
     {
         Images.Clear();
         productId = Convert.ToInt64(Value);
-        Product = await ProductService.GetByIdAsync(productId);
+        Product = await productVM.GetByIdAsync(productId);
         Categories = (await CategoryService.GetCategoriesAsync()).ToList();
 
         Category = Categories.FirstOrDefault(x => x.Id == Product.CategoryId);
@@ -134,7 +135,7 @@
         try
         {
             SetProductAvailability();
-            await ProductService.CreateOrUpdateProductAsync(new Dto_Model.Product { Name = Name, Price = Price, StockQty = StockQty, CategoryId = CategoryId, InStock = InStock, Code = Code, Id = Id });
+            await productVM.CreateOrUpdateProductAsync(new Dto_Model.Product { Name = Name, Price = Price, StockQty = StockQty, CategoryId = CategoryId, InStock = InStock, Code = Code, Id = Id });
             navigationManager.NavigateTo("products");
         }
         catch (Exception ex)

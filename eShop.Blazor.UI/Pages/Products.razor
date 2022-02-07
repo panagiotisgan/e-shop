@@ -1,6 +1,7 @@
 ﻿@page "/products"
 
-@inherits ProductsBase
+@*@inherits ProductsBase*@
+@inject IProductViewModel productViewModel
 @inject NavigationManager NavigationManager
 
 @attribute [Authorize]
@@ -22,10 +23,10 @@
             <th class="text-center">Delete</th>
         </tr>
     </thead>
-    @if (Products != null)
+    @if (productViewModel.Products != null)
     {
         <tbody>
-            @foreach (var product in Products)
+            @foreach (var product in productViewModel.Products)
             {
                 var Value = product.Id;
                 var url = NavigationManager.ToAbsoluteUri($"UpdateProduct/{Value}");
@@ -35,10 +36,17 @@
                     <td>@product.Price</td>
                     <td>@product.StockQty</td>                    
                     <td class="text-center"><a href="@url"><span class="fas fa-edit"></span></a></td>
-                    <td class="text-center"><span class="fas fa-trash-alt" @onclick="async () => await DeleteProduct(product.Id)"></span></td>
+                    <td class="text-center"><span class="fas fa-trash-alt" @onclick="async () => await productViewModel.DeleteProduct(product.Id)"></span></td>
                 </tr>
 
             }
         </tbody>
     }
 </table>
+
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        await productViewModel.GetProductsAsync();
+    }
+}

@@ -1,5 +1,4 @@
 ﻿using Blazored.LocalStorage;
-using eShop.Blazor.UI.Helpers;
 using eShop.Blazor.UI.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Collections.Generic;

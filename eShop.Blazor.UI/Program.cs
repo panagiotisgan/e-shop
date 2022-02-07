@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using Blazored.Modal;
 using eShop.Blazor.UI.Helpers;
 using eShop.Blazor.UI.Services;
+using eShop.Blazor.UI.ViewModels;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -30,15 +31,14 @@ namespace eShop.Blazor.UI
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             //builder.Services.AddSingleton<ITokenRepository, TokenRepository>();
             builder.Services.AddScoped<AuthenticationStateProvider, JwtTokenAuthenticationStateProvider>();
-            builder.Services.AddSingleton<IWebApiHelper>(p =>
-            new WebApiHelper(
-                new HttpClient(),
-                "https://localhost:44371",
-                p.GetRequiredService<ITokenRepository>()));
+            
 
-            builder.Services.AddHttpClient<IProductService, ProductService>(client =>
+            //builder.Services.AddHttpClient<IProductService, ProductService>(client =>
+            // client.BaseAddress = new Uri("https://localhost:44371/"));
+
+            //Error me provlima sto registration to httpClient me ViewModel
+            builder.Services.AddHttpClient<IProductViewModel, ProductViewModel>(client =>
              client.BaseAddress = new Uri("https://localhost:44371/"));
-            //builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddHttpClient<IUserService, UserService>(client =>
              client.BaseAddress = new Uri("https://localhost:44371/"));
             builder.Services.AddHttpClient<ICategoryService, CategoryService>(client =>
@@ -51,14 +51,6 @@ namespace eShop.Blazor.UI
             
 
             builder.Services.AddBlazoredModal();
-
-            //var host = builder.Build();
-
-            //var authService = host.Services.GetRequiredService<IAuthenticateService>();
-
-            //await authService.InitializeCookie();
-
-            //builder.Services.AddControllersWithViews()
 
             await builder.Build().RunAsync();
         }       
