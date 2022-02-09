@@ -24,13 +24,19 @@ namespace eShop.WebApi.Controllers
         private readonly ILoginService _loginService;
         private readonly IUserUnitOfWork _userUnitOfWork;
         private readonly ICredentialUnitOfWork _credentialUnitOfWork;
+        private readonly ICountryUnitOfWork _countryUnitOfWork;
+        private readonly IStateUnitOfWork _stateUnitOfWork;
         private readonly ICustomManager _jwtTokenManager;
-        public UsersController(IUserUnitOfWork _userUnitOfWork, ILoginService loginService, ICustomManager jwtTokenManager, ICredentialUnitOfWork credentialUnitOfWork)
+        public UsersController(IUserUnitOfWork userUnitOfWork, ILoginService loginService,
+            ICustomManager jwtTokenManager, ICredentialUnitOfWork credentialUnitOfWork,
+            ICountryUnitOfWork countryUnitOfWork, IStateUnitOfWork stateUnitOfWork)
         {
-            this._userUnitOfWork = _userUnitOfWork;
-            this._loginService = loginService;
-            this._jwtTokenManager = jwtTokenManager;
+            _userUnitOfWork = userUnitOfWork;
+            _loginService = loginService;
+            _jwtTokenManager = jwtTokenManager;
             _credentialUnitOfWork = credentialUnitOfWork;
+            _countryUnitOfWork = countryUnitOfWork;
+            _stateUnitOfWork = stateUnitOfWork;
         }
 
         [AllowAnonymous]
@@ -51,7 +57,7 @@ namespace eShop.WebApi.Controllers
         [AllowAnonymous]
         [HttpPost("AccountCreate")]
         //[CreateAccountFilter] //Otan exw to filter den ftanei to request
-        public IActionResult CreateUser([FromBody] UserDTO user)
+        public async Task<IActionResult> CreateUser([FromBody] UserDTO user)
         {
             if (user == null)
                 return BadRequest();
@@ -60,6 +66,9 @@ namespace eShop.WebApi.Controllers
 
             try
             {
+
+                State state = await _stateUnitOfWork.StateDbRepository.GetByNameAsync(user.StateName);
+
                 if (!String.IsNullOrWhiteSpace(user.Password))
                 {
                     var response = PasswordService.CreatePassword(user.Password);
@@ -79,7 +88,7 @@ namespace eShop.WebApi.Controllers
                     actualUser.VATNumber = user.VATNumber;
                     actualUser.ZipCode = user.ZipCode;
                     actualUser.AddressNo1 = user.AddressNo1;
-                    actualUser.Country = user.Country;
+                    actualUser.CountryId = state.CountryId;
                     actualUser.Credential = credential;
                     actualUser.IsActiveAccount = true;
                     actualUser.CityName = user.CityName;
@@ -93,7 +102,7 @@ namespace eShop.WebApi.Controllers
             catch (Exception ex) { }
 
 
-            return null;
+            return Ok($"User Created Successfully with id {actualUser.Id}");
         }
 
         //api/Users

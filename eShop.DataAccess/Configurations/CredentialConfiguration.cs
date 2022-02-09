@@ -11,8 +11,8 @@ namespace eShop.DataAccess.Configurations
     {
         public void Configure(EntityTypeBuilder<Credential> builder)
         {
-            builder.Property(cr => cr.Username).IsRequired()
-                  .HasMaxLength(50);
+            //Create UniqueField in DB
+            builder.HasIndex(x=>x.Username).IsUnique();
 
             builder.Property(cr => cr.Password).IsRequired();
 

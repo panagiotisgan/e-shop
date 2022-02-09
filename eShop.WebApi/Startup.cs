@@ -13,10 +13,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace eShop.WebApi
 {
@@ -39,11 +41,8 @@ namespace eShop.WebApi
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IOrderDetailsRepository, OrderDetailsRepository>();
             //services.AddTransient<ICredentialRepository, CredentialRepository>();
-            services.AddTransient<ICountryRepository, CountryRepository>();
             services.AddTransient<IStateRepository, StateRepository>();
             services.AddTransient<ICityRepository, CityRepository>();
-            //services.AddTransient<IUnitOfWork, UnitOfWork>();
-            //services.AddTransient<IProductRepository, ProductRepository>();
             services.AddUnitOfWorkServices();
             services.AddRepositoriesServices();
                         
@@ -63,6 +62,22 @@ namespace eShop.WebApi
                         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("OVZ0ufrJRt7T6g06qE9BLE91cll3MwZSHXnFJP")),
                         ClockSkew = TimeSpan.Zero
                     };
+
+                    //options.Events = new JwtBearerEvents
+                    //{
+                    //    OnAuthenticationFailed = context =>
+                    //    {
+                    //        string response = "";
+                    //        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                    //        {
+                    //            context.Response.Headers.Add("Token-Expired", "true");
+                    //            response = JsonConvert.SerializeObject("The access token provided has expired.");
+                    //        }
+
+                    //        context.Response.WriteAsync(response);
+                    //        return Task.CompletedTask;
+                    //    }
+                    //};
                 });
 
             services.AddCors(options =>

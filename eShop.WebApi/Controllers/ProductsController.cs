@@ -29,14 +29,14 @@ namespace eShop.WebApi.Controllers
 
         [HttpGet]
         [Route("GetProducts")]
-        [AuthorizationFilter]
+        [Authorize]
         public async Task<IActionResult> GetProducts()
         {
             var products = await this._productUnitOfWork.ProductRepository.GetAllAsync();
             return this.Ok(products);
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet]
         [Route("GetProduct/{productId}")]
         public async Task<IActionResult> GetByIdAsync(long productId)

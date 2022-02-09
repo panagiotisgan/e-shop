@@ -40,7 +40,7 @@ namespace eShop.WebApi.Auth
                }               
                //new Claim(ClaimTypes.Role, user.Role)
                ),
-                Expires = DateTime.UtcNow.AddHours(2).AddMinutes(2),
+                Expires = DateTime.Now.AddMinutes(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature)                
             };
 
