@@ -11,8 +11,6 @@ namespace eShop.Blazor.UI.Pages
     public class CreateProductBase : ComponentBase
     {
         [Inject]
-        public IProductService ProductService { get; set; }
-        [Inject]
         private ICategoryService CategoryService { get; set; }
 
         public List<Category> Categories { get; set; } = new List<Category>(); 

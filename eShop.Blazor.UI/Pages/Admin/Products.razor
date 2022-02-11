@@ -1,10 +1,10 @@
-﻿@page "/products"
+﻿@page "/admin/products"
 
 @*@inherits ProductsBase*@
 @inject IProductViewModel productViewModel
 @inject NavigationManager NavigationManager
 
-@attribute [Authorize]
+@attribute [Authorize(Roles = "User")]
 
 <h3>Products List</h3>
 <div class="row">

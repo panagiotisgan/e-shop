@@ -4,6 +4,9 @@
 @using eShop.Blazor.UI.Dto_Model
 @inherits CreateProductBase
 @inject NavigationManager NavigationManager
+@inject IProductViewModel ProductViewModel
+
+@attribute [Authorize(Roles = "Administator")]
 
 <h3>Create Product</h3>
 
@@ -66,7 +69,7 @@
         try
         {
             SetProductAvailability();
-            await ProductService.CreateOrUpdateProductAsync(new Dto_Model.Product { Name = Name, Price = Price, StockQty = StockQty, CategoryId = CategoryId, InStock = InStock, Code = Code, Images = Images });
+            await ProductViewModel.CreateOrUpdateProductAsync(new Dto_Model.Product { Name = Name, Price = Price, StockQty = StockQty, CategoryId = CategoryId, InStock = InStock, Code = Code, Images = Images });
             NavigationManager.NavigateTo("products");
         }
         catch (Exception ex)

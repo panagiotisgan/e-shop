@@ -28,11 +28,12 @@ namespace eShop.Blazor.UI
 
         private static void ExtractRolesFromJWT(List<Claim> claims, Dictionary<string, object> keyValuePairs)
         {
-            keyValuePairs.TryGetValue(ClaimTypes.Role, out var roles);
+            keyValuePairs.TryGetValue("role"/*ClaimTypes.Role*/, out var roles);
 
             if (roles != null)
             {
-                var parsedRoles = roles.ToString().Trim().TrimStart('[').TrimEnd(']').Split(',');
+                var result = roles.ToString();
+                var parsedRoles = result.Trim().TrimStart('[').TrimEnd(']').Split(',');
 
                 if (parsedRoles.Length > 1)
                 {
@@ -47,7 +48,7 @@ namespace eShop.Blazor.UI
                 }
             }
 
-            keyValuePairs.Remove(ClaimTypes.Role);
+            keyValuePairs.Remove("role"/*ClaimTypes.Role*/);
         }
 
         private static byte[] ParseBase64WithoutPadding(string base64)

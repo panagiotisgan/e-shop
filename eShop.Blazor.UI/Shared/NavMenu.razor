@@ -1,4 +1,7 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IAuthenticationService authService
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">eShop.Blazor.UI</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -22,6 +25,22 @@
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
             </NavLink>
         </li>
+        @if (IsLoggedIn)
+        {
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" @onclick="async () => await OnLogout()">
+                    <span class="oi oi-account-login" aria-hidden="true"></span> Logout
+                </NavLink>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="login">
+                    <span class="oi oi-account-login" aria-hidden="true"></span> Login
+                </NavLink>
+            </li>
+        }
     </ul>
 </div>
 
@@ -30,8 +49,31 @@
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
+    private bool IsLoggedIn = false;
+
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            IsLoggedIn = true;
+        }
+        else
+            IsLoggedIn = false;
+    }
+
+    public async Task OnLogout()
+    {
+        IsLoggedIn = false;
+        await authService.Logout();
+
+    }
+
 }

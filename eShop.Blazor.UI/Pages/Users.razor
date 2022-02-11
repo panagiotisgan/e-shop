@@ -1,5 +1,7 @@
 ﻿@page "/users"
 @inherits UsersBase
+@attribute [Authorize(Roles = "User")]
+
 <h3>Users</h3>
 
 <table class="table table-responsive-sm">

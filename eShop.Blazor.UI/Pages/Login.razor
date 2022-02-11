@@ -10,30 +10,30 @@
         <p>@AuthenticationErrorText</p>
     </div>
 }
-
-<EditForm Model="userModel" OnValidSubmit="OnLogin" class="card card-body m-3">
+<div class="row justify-content-center">
+<EditForm Model="userModel" OnValidSubmit="OnLogin" class="col-12 col-md-8 card card-body m-3">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="form-group row">
-        <label for="email" class="col-md-2 col-form-label">Username</label>
-        <div class="col-md-10">
+        <label for="email" class="col-12 col-md-2 col-form-label">Username</label>
+        <div class="col-12 col-md-4">
             <InputText id="username" class="form-control" @bind-Value="@userModel.Username" />
             <ValidationMessage For="@(()=>userModel.Username)" />
         </div>
     </div>
     <div class="form-group row">
-        <label for="password" class="col-md-2 col-form-label">Password</label>
-        <div class="col-md-10">
+        <label for="password" class="col-12 col-md-2 col-form-label">Password</label>
+        <div class="col-12 col-md-4">
             <InputText id="password" class="form-control" @bind-Value="@userModel.Password" />
             <ValidationMessage For="@(()=>userModel.Password)" />
         </div>
     </div>
 
-    <div class="form-check row">
-        <label for="isHuman" class="col-md-2 form-check-label">I'm not a robot.</label>
-        <div>
+    <div class="form-check row">        
+        <div class="col-12">
             <InputCheckbox id="isHuman" class="form-check-input" @bind-Value="@userModel.IsHuman" @onchange="CheckBoxClicked"/>
             <ValidationMessage For="@(()=>userModel.IsHuman)" />
+            <label for="isHuman" class="col-12 form-check-label">I'm not a robot.</label>
         </div>
     </div>
 
@@ -43,7 +43,7 @@
         </div>
     </div>
 </EditForm>
-
+</div>
 @code {
     AlertComponent alertComponent;
     [Parameter]
@@ -84,7 +84,7 @@
 
         if (result != null)
         {
-            navManager.NavigateTo("/products", true);
+            navManager.NavigateTo("/admin/products", true);
         }
         else
         {

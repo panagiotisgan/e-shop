@@ -33,9 +33,7 @@ namespace eShop.Blazor.UI
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",token);
 
-            return new AuthenticationState(new ClaimsPrincipal(
-                 new ClaimsIdentity(JwtParse.ParseClaimsFromJwt(token), "jwtAuthType"))
-                );
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(JwtParse.ParseClaimsFromJwt(token), "jwtAuthType")));
         }
 
         public void NotifyUserAuthentication(string token)
