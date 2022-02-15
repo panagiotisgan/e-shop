@@ -1,0 +1,47 @@
+﻿@page "/admin/users"
+
+@inherits UsersBase
+
+@*<TableComponent Items="Users" Context="User">
+    <TableHeader>
+        <th>FirstName</th>
+        <th>AddressNo1</th>
+        <th>Email</th>
+    </TableHeader>
+    <RowTemplate>
+        <td>@User.FirstName</td>
+        <td>@User.AddressNo1</td>
+        <td>@User.Email</td>
+    </RowTemplate>
+</TableComponent>*@
+
+<table class="table table-responsive-sm">
+    <thead>
+        <tr>
+            <th colspan="2">Fullname</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Phone</th>
+        </tr>
+    </thead>
+    @if (Users != null)
+    {
+        <tbody>
+            @foreach (var user in Users)
+            {
+
+                <tr>
+                    <td colspan="2">@user.LastName @user.FirstName</td>
+                    <td>@user.Email</td>
+                    <td>@user.AddressNo1</td>
+                    <td>@user.PhoneNumber</td>
+                </tr>
+
+            }
+        </tbody>
+    }
+</table>
+
+
+@code {   
+}
