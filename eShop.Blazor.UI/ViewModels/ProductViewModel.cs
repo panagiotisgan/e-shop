@@ -46,6 +46,8 @@ namespace eShop.Blazor.UI.ViewModels
         {
             try
             {
+                var token = await _localStorageService.GetItemAsync<string>("jwt_token");
+                _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", token);
                 var response = await this._client.GetAsync($"api/Products/GetProduct/{productId}");
 
                 if (response.IsSuccessStatusCode)

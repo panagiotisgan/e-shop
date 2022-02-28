@@ -4,6 +4,8 @@
 @inject NavigationManager navigationManager
 @inject IProductViewModel productVM
 
+@attribute [Authorize(Roles = "User")]
+
 @*TO DO add update form to display and change product Data*@
 <form method="post">
 
