@@ -1,20 +1,19 @@
-﻿using eShop.DataAccess.IRepositories;
-using eShop.Model;
+﻿using eShop.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace eShop.DataAccess.Repositories
+namespace eShop.DataAccess
 {
-    public class OrderRepository : GenericRepository<Order, EshopDbContext>, IOrderRepository
+    public class OrderRepository : GenericRepository<Order, EshopDbContext>, IOrderDbRepository
     {
-        public OrderRepository(EshopDbContext DbContext) :base(DbContext)
+        public OrderRepository(EshopDbContext context) : base(context)
         {
-
         }
-        public Order GetByOrderDate(DateTime orderDate,long userId)
+
+        public Order GetByOrderDate(DateTime orderDate, long userId)
         {
             return this._context.Orders.Include(o => o.OrderDetails)
                 .Where(o => o.UserId == userId && (o.Order_Date.CompareTo(orderDate) == 0))
@@ -41,5 +40,13 @@ namespace eShop.DataAccess.Repositories
                 .Where(o => o.Order_Date.CompareTo(orderDate) == 0)
                 .ToList();
         }
+    }
+
+    public interface IOrderDbRepository : IDbRepository<Order>, IOrderRepository
+    {
+        Order GetOrderByUserId(long UserId);
+        Order GetByOrderDate(DateTime orderDate, long userId);
+        IEnumerable<Order> GetOrdersByOrderDate(DateTime orderDate);
+        IEnumerable<Order> GetByOrderStatus(OrderStatus orderStatus);
     }
 }
