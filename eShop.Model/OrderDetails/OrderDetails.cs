@@ -9,11 +9,9 @@ namespace eShop.Model
     {
         public const int ProductNameMaxLength = 120;
         public long OrderId { get; set; }
-        public Order Order { get; set; }
+        public virtual Order Order { get; set; }
         public long ProductId { get; set; }
-        public Product Product { get; set; }
-        public string Product_Name { get; set; }
-        public decimal Unit_Price { get; set; }
+        public virtual Product Product { get; set; }
         public decimal Quantity { get; set; }
 
         //public ObservableCollection<Product> Products { get; set; }

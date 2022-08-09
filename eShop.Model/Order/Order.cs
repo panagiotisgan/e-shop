@@ -8,9 +8,9 @@ namespace eShop.Model
     public class Order:BaseEntity
     {
         public OrderStatus OrderStatus { get; set; }
-        public DateTime Order_Date { get; set; }
-        public DateTime? Delivered_Date { get; set; }
-        public decimal Total_Cost { get; set; }
+        public DateTime OrderDate { get; set; }
+        public DateTime? DeliveredDate { get; set; }
+        public decimal TotalCost { get; set; }
         public bool Invoice { get; set; }
         public long UserId { get; set; }
         public User User { get; set; }
