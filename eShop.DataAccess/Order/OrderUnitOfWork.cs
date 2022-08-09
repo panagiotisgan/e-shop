@@ -18,6 +18,6 @@ namespace eShop.DataAccess
 
     public interface IOrderUnitOfWork : IUnitOfWork
     {
-        IOrderDbRepository OrderDdRepository { get;  }
+        IOrderDbRepository OrderDdRepository { get; }
     }
 }

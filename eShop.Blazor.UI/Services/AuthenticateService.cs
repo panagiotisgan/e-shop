@@ -37,7 +37,7 @@ namespace eShop.Blazor.UI.Services
             {
                 apiResult = await _webApiHelper.InvokePostReturnString("api/Users/authentication", userCredentials);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
 
             }

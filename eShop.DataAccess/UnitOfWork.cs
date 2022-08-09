@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Text;
 
 namespace eShop.DataAccess
@@ -7,6 +9,7 @@ namespace eShop.DataAccess
     public class UnitOfWork : IUnitOfWork
     {
         private readonly EshopDbContext _context;
+        private IDbContextTransaction _dbContextTransaction;
         public UnitOfWork(EshopDbContext context)
         {
             this._context = context;
@@ -28,6 +31,21 @@ namespace eShop.DataAccess
         {
             this._context.SaveChanges();
         }
+
+        public void StartTransaction()
+        {
+            _dbContextTransaction = this._context.Database.BeginTransaction();
+        }
+
+        public void Rollback()
+        {
+            _dbContextTransaction.Rollback();
+        }
+
+        public void Commit()
+        {
+            _dbContextTransaction?.Commit();
+        }
     }
 
     public interface IUnitOfWork
@@ -38,5 +56,8 @@ namespace eShop.DataAccess
         void EnableChangeTracker();
 
         bool IsChangeTrackerEnabled { get; }
+        void Commit();
+        void StartTransaction();
+        void Rollback();
     }
 }

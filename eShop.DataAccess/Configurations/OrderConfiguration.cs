@@ -12,9 +12,9 @@ namespace eShop.DataAccess.Configurations
         public void Configure(EntityTypeBuilder<Order> builder)
         {
             builder.Property(o => o.OrderStatus).IsRequired();
-            builder.Property(o => o.Order_Date).IsRequired();
-            builder.Property(o => o.Delivered_Date).IsRequired(false);
-            builder.Property(o => o.Total_Cost).IsRequired();
+            builder.Property(o => o.OrderDate).IsRequired();
+            builder.Property(o => o.DeliveredDate).IsRequired(false);
+            builder.Property(o => o.TotalCost).IsRequired();
             builder.Property(o => o.Invoice).IsRequired();
 
             builder.HasOne(x=>x.User)

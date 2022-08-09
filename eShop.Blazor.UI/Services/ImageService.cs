@@ -20,7 +20,7 @@ namespace eShop.Blazor.UI.Services
             {
                 await _client.DeleteAsync($"api/Images/{id}");
             }
-            catch(Exception ex)
+            catch(Exception)
             {
 
             }

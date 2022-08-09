@@ -9,6 +9,5 @@ namespace eShop.DataAccess.DTOs
         public decimal UnitPrice { get; set; }
         public decimal Quantity { get; set; }
         public long ProductId { get; set; }
-        public string ProductName { get; set; }
     }
 }

@@ -36,6 +36,7 @@ namespace eShop.WebApi
             services.AddDbContext<EshopDbContext>();
             
             services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICustomManager, JwtTokenManager>();
             //services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
@@ -117,6 +118,7 @@ namespace eShop.WebApi
 
             app.UseAuthentication();
             app.UseAuthorization();            
+                        
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,0 +1,45 @@
+﻿@page "/admin/order"
+@page "/admin/orderPage"
+@inherits OrdersBase
+
+@attribute [Authorize]
+
+<table class="table">
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Pr. Code</th>
+          <th>Quantity</th>
+          <th>Unit Price</th>
+      </tr>
+  </thead>
+  <tbody>
+      @if (Orders is not null && Orders.Count()>0)
+        {
+            foreach (var order in Orders)
+            {
+                <tr>
+                    <td>@order.Product.Name</td>
+                    <td>@order.Product.Code</td>
+                    <td>@order.Quantity</td>
+                    <td>@order.Product.Price</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="2">Page: @CurrentPage of @Pages</td>
+                <td><a href="#">@((MarkupString)myMarkup)</a></td>
+                <td><a href="#">@((MarkupString)greaterThan)</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@functions {
+    string myMarkup = "<span class='markup'>&lt;</span>";
+    string greaterThan = "<span class='markup'>&gt;</span>";
+}
+@{
+    Console.WriteLine($"{Pages}");
+}

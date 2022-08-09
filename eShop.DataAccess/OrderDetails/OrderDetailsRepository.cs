@@ -1,5 +1,6 @@
 ﻿using eShop.DataAccess.IRepositories;
 using eShop.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +21,27 @@ namespace eShop.DataAccess
                 .ToList();
         }
 
-        public OrderDetails GetOrderDetailsByName(string productName)
+
+        public List<OrderDetails> GetDetailsByOrderId(List<long> orderIds)
         {
-            return this._context.OrderDetails
-                .Where(od => od.Product_Name.Equals(productName))
-                .FirstOrDefault();
+           return _context.OrderDetails.Where(x=> orderIds.Contains(x.OrderId)).ToList();
+        }
+
+
+        public IQueryable<OrderDetails> GetIquerableOrder()
+        {
+            return from orderDet in this._context.OrderDetails.Include(y=>y.Product)
+                   join order  in this._context.Orders.Include(or=>or.User)
+                   on orderDet.OrderId equals order.Id
+                   select  orderDet ;
         }
     }
 
     public interface IOrderDetailsDbRepository : IDbRepository<OrderDetails>, IOrderDetailsRepository
     {
         List<OrderDetails> GetDetailsByOrderId(long orderId);
-        OrderDetails GetOrderDetailsByName(String productName);
+        List<OrderDetails> GetDetailsByOrderId(List<long> orderIds);
+
+        IQueryable<OrderDetails> GetIquerableOrder();
     }
 }

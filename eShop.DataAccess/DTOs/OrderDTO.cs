@@ -8,6 +8,6 @@ namespace eShop.DataAccess.DTOs
     {
         public long UserId { get; set; }
         public bool Invoice { get; set; }
-        public List<OrderDetailsDTO> orderDetailsDTOs { get; set; }
+        public List<OrderDetailsDTO> OrderDetailsDTOList { get; set; }
     }
 }

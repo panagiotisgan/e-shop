@@ -1,14 +1,14 @@
 ﻿@page "/admin/products"
 
-@*@inherits ProductsBase*@
-@inject IProductViewModel productViewModel
+@inherits ProductsBase
+@*@inject IProductViewModel productViewModel*@
 @inject NavigationManager NavigationManager
 
-@attribute [Authorize(Roles = "User")]
+@attribute [Authorize]
 
 <h3>Products List</h3>
 <div class="row">
-    <div class="col-6 col-md-2">
+    <div class="col-6 col-md-2 my-2">
         <a href="/createProduct"><button class="btn btn-outline-primary">Add Product</button></a>
     </div>
 </div>
@@ -23,10 +23,10 @@
             <th class="text-center">Delete</th>
         </tr>
     </thead>
-    @if (productViewModel.Products != null)
+    @if (Products != null)
     {
         <tbody>
-            @foreach (var product in productViewModel.Products)
+            @foreach (var product in Products)
             {
                 var Value = product.Id;
                 var url = NavigationManager.ToAbsoluteUri($"UpdateProduct/{Value}");
@@ -36,17 +36,13 @@
                     <td>@product.Price</td>
                     <td>@product.StockQty</td>                    
                     <td class="text-center"><a href="@url"><span class="fas fa-edit"></span></a></td>
-                    <td class="text-center"><span class="fas fa-trash-alt" @onclick="async () => await productViewModel.DeleteProduct(product.Id)"></span></td>
+                    <td class="text-center"><span class="fas fa-trash-alt" @onclick="Delete_Product"></span></td>
                 </tr>
 
             }
         </tbody>
     }
 </table>
-
+<ConfirmationModalComponent @ref="DeleteConfirmation"></ConfirmationModalComponent>
 @code{
-    protected override async Task OnInitializedAsync()
-    {
-        await productViewModel.GetProductsAsync();
-    }
 }

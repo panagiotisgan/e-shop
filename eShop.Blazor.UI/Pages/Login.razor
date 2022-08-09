@@ -13,7 +13,7 @@
 <div class="row justify-content-center">
 <EditForm Model="userModel" OnValidSubmit="OnLogin" class="col-12 col-md-8 card card-body m-3">
     <DataAnnotationsValidator />
-    <ValidationSummary />
+    @*<ValidationSummary />*@
     <div class="form-group row">
         <label for="email" class="col-12 col-md-2 col-form-label">Username</label>
         <div class="col-12 col-md-4">
@@ -24,7 +24,7 @@
     <div class="form-group row">
         <label for="password" class="col-12 col-md-2 col-form-label">Password</label>
         <div class="col-12 col-md-4">
-            <InputText id="password" class="form-control" @bind-Value="@userModel.Password" />
+            <InputText type="password" id="password" class="form-control" @bind-Value="@userModel.Password" />
             <ValidationMessage For="@(()=>userModel.Password)" />
         </div>
     </div>

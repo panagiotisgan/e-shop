@@ -21,8 +21,6 @@ namespace eShop.DataAccess.Configurations
                 .HasForeignKey(p => p.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(od => od.Product_Name).IsRequired().HasMaxLength(OrderDetails.ProductNameMaxLength);
-
         }
     }
 }

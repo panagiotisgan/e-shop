@@ -38,7 +38,7 @@ namespace eShop.Blazor.UI
 
         public void NotifyUserAuthentication(string token)
         {
-            var authenticatedUser = new ClaimsPrincipal( new ClaimsIdentity(JwtParse.ParseClaimsFromJwt(token), "jwtAuthType"));
+            var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(JwtParse.ParseClaimsFromJwt(token), "jwtAuthType"));
             var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
 
             NotifyAuthenticationStateChanged(authState);

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace eShop.DataAccess
 {
@@ -16,7 +17,7 @@ namespace eShop.DataAccess
         public Order GetByOrderDate(DateTime orderDate, long userId)
         {
             return this._context.Orders.Include(o => o.OrderDetails)
-                .Where(o => o.UserId == userId && (o.Order_Date.CompareTo(orderDate) == 0))
+                .Where(o => o.UserId == userId && (o.OrderDate.CompareTo(orderDate) == 0))
                 .FirstOrDefault();
         }
 
@@ -37,7 +38,7 @@ namespace eShop.DataAccess
         public IEnumerable<Order> GetOrdersByOrderDate(DateTime orderDate)
         {
             return this._context.Orders
-                .Where(o => o.Order_Date.CompareTo(orderDate) == 0)
+                .Where(o => o.OrderDate.CompareTo(orderDate) == 0)
                 .ToList();
         }
     }

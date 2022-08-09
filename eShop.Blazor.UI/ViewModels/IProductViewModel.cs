@@ -8,7 +8,8 @@ namespace eShop.Blazor.UI.ViewModels
     {
         public IEnumerable<Product> Products { get; set; }
         Task CreateOrUpdateProductAsync(Product product);
-        Task DeleteProduct(long productId);
+        //Task DeleteProduct(long productId);
+        void DeleteProduct();
         Task<Product> GetByIdAsync(long productId);
         Task GetProductsAsync();
     }

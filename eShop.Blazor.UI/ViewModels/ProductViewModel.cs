@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using eShop.Blazor.UI.Components;
 using eShop.Blazor.UI.Dto_Model;
 using Microsoft.AspNetCore.Components.Authorization;
 using Newtonsoft.Json;
@@ -11,6 +12,8 @@ namespace eShop.Blazor.UI.ViewModels
 {
     public class ProductViewModel : IProductViewModel
     {
+        protected ConfirmationModalComponent DeleteConfirmation { get; set; }
+
         private HttpClient _client;
         private ILocalStorageService _localStorageService;
         private readonly AuthenticationStateProvider authenticationStateProvider;
@@ -36,10 +39,15 @@ namespace eShop.Blazor.UI.ViewModels
                 await this._client.PostAsync("api/Products", byteContent);
         }
 
-        public async Task DeleteProduct(long productId)
+        //public async Task DeleteProduct(long productId)
+        //{
+        //    await _client.DeleteAsync($"api/Products/delete?productId={productId}");
+        //    await GetProductsAsync();
+        //}
+
+        public void DeleteProduct()
         {
-            await _client.DeleteAsync($"api/Products/delete?productId={productId}");
-            await GetProductsAsync();
+            DeleteConfirmation.Show();
         }
 
         public async Task<Product> GetByIdAsync(long productId)
@@ -57,7 +65,7 @@ namespace eShop.Blazor.UI.ViewModels
                     return product;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -73,7 +81,7 @@ namespace eShop.Blazor.UI.ViewModels
                 //var cookie = await _localStorageService.GetItemAsync<AuthenticationResult>("jwt.cookie");
                 _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", token);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
 
             }

@@ -50,7 +50,7 @@ namespace eShop.Blazor.UI.Services
                     return product;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -60,8 +60,8 @@ namespace eShop.Blazor.UI.Services
 
         public async Task<IEnumerable<Product>> GetProductsAsync()
         {
-            var cookie = await _localStorageService.GetItemAsync<AuthenticationResult>("jwt.cookie");
-
+            var token = await _localStorageService.GetItemAsync<string>("jwt_token");
+            _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", token);
             //requestMessage.Method = HttpMethod.Get;
             //requestMessage.RequestUri = new System.Uri("api/Products/GetProducts");
             //requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", cookie.Token);

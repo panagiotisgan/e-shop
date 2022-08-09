@@ -140,7 +140,7 @@
             await productVM.CreateOrUpdateProductAsync(new Dto_Model.Product { Name = Name, Price = Price, StockQty = StockQty, CategoryId = CategoryId, InStock = InStock, Code = Code, Id = Id });
             navigationManager.NavigateTo("products");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
 
         }
@@ -183,7 +183,7 @@
                     //Image.ImagePath = file.Name;
                     //Images.Add(Image);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                 }

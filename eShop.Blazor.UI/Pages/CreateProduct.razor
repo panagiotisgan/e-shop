@@ -6,7 +6,8 @@
 @inject NavigationManager NavigationManager
 @inject IProductViewModel ProductViewModel
 
-@attribute [Authorize(Roles = "Administator")]
+@*@attribute [Authorize(Roles = "Administator")]*@
+@attribute [Authorize]
 
 <h3>Create Product</h3>
 
@@ -70,7 +71,7 @@
         {
             SetProductAvailability();
             await ProductViewModel.CreateOrUpdateProductAsync(new Dto_Model.Product { Name = Name, Price = Price, StockQty = StockQty, CategoryId = CategoryId, InStock = InStock, Code = Code, Images = Images });
-            NavigationManager.NavigateTo("products");
+            NavigationManager.NavigateTo("products",true);
         }
         catch (Exception ex)
         {

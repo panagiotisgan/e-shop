@@ -99,7 +99,7 @@ namespace eShop.WebApi.Controllers
                     _userUnitOfWork.Save();
                 }
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
 
 
             return Ok($"User Created Successfully with id {actualUser.Id}");
