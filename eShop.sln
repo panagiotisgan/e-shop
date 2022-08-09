@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShop.Model", "eShop.Model\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShop.DataAccess", "eShop.DataAccess\eShop.DataAccess.csproj", "{44FDDE63-8896-40E3-BA45-59A54474C69F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShop.UITests", "eShop.UITests\eShop.UITests.csproj", "{F411CA7F-2F75-4036-881A-541382B8BC09}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShop.WebApi", "eShop.WebApi\eShop.WebApi.csproj", "{BFD635AF-5F02-4543-A8C5-39F488C2732E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShop.AdminUI", "eShop.AdminUI\eShop.AdminUI.csproj", "{B9C44267-130D-4032-A3E7-45BD2F7A599D}"
