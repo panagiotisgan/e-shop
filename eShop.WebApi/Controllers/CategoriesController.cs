@@ -27,7 +27,7 @@ namespace eShop.WebApi.Controllers
                 var categories = await this._categoryUnitOfWork.CategoryDbRepository.GetAllAsync();
                 return Ok(categories);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return BadRequest();
             }

@@ -38,9 +38,9 @@ namespace eShop.WebApi.Controllers
                     return Ok(Images);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
 
             return NotFound();

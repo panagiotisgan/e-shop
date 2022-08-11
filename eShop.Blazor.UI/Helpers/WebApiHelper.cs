@@ -49,7 +49,7 @@ namespace eShop.Blazor.UI.Helpers
                     return res;
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
 
             }           

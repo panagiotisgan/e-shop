@@ -59,9 +59,9 @@ namespace eShop.WebApi.Controllers
                 this._productUnitOfWork.ProductRepository.CreateEntity(product);
                 this._productUnitOfWork.Save();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
 
             return this.Ok();
@@ -80,7 +80,7 @@ namespace eShop.WebApi.Controllers
                 this._productUnitOfWork.ProductRepository.UpdateEntity(product);
                 this._productUnitOfWork.Save();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest();
             }
@@ -105,7 +105,7 @@ namespace eShop.WebApi.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch(Exception)
             {
 
             }
@@ -115,9 +115,9 @@ namespace eShop.WebApi.Controllers
                 this._productUnitOfWork.ProductRepository.DeleteEntity(productId);
                 this._productUnitOfWork.Save();
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                throw ex;
+                throw;
             }
 
             return Ok();
