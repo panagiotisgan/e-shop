@@ -10,7 +10,7 @@ namespace eShop.Blazor.UI.Services
 {
     public class UserService : IUserService
     {
-        private HttpClient _client;
+        private readonly HttpClient _client;
         public UserService(HttpClient client)
         {
             _client = client;

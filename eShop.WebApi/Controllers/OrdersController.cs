@@ -5,6 +5,7 @@ using eShop.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,18 +45,28 @@ namespace eShop.WebApi.Controllers
         [HttpGet]
         [Route("GetOrders")]
         //[Authorize]
-        public IActionResult GetOrders([FromQuery] int? page = 0, [FromQuery] int pageSize = 10)
+        public IActionResult GetOrders([FromQuery] int? pageNum = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var orders = _orderDetailsUnitOfWork.OrderDetailsDbRepository.GetIquerableOrder();
+                var orders = _orderDetailsUnitOfWork.OrderDetailsDbRepository.GetOrderDetailsPaged(pageNum.Value, pageSize);
 
-                var ordersList = orders.Skip((page ?? 0) * pageSize)
-                    .Take(pageSize)
-                    .ToList();
+                var metadata = new
+                {
+                    orders.PageSize,
+                    orders.TotalCount,
+                    orders.TotalPages,
+                    orders.HasNext,
+                    orders.HasPrevious
+                };
 
-                if (ordersList.Count > 0)
-                    return Ok(new { list = ordersList, count = orders.Count() });                    
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+
+                if(orders.Count == 0)
+                    return NoContent();
+
+                return Ok(new { list = orders });
             }
             catch (Exception) { }
 

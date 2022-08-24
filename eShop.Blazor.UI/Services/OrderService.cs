@@ -15,7 +15,7 @@ namespace eShop.Blazor.UI.Services
         private ILocalStorageService _localStorageService;
         private readonly AuthenticationStateProvider authenticationStateProvider;
 
-        public int Page { get; set; }
+        public int Page { get; set; } = 1;
         public int PageSize { get; set; } = 5;
         public IEnumerable<OrderDetails> OrdersList { get; set; }
         public OrderService(HttpClient client, ILocalStorageService localStorageService, AuthenticationStateProvider authenticationStateProvider)
@@ -31,15 +31,15 @@ namespace eShop.Blazor.UI.Services
             OrdersList = new List<OrderDetails>();
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-            var result = await client.GetAsync($"api/Orders/GetOrders?page={Page}&pageSize={PageSize}");
+            var result = await client.GetAsync($"api/Orders/GetOrders?pageNum={Page}&pageSize={PageSize}");
             result.EnsureSuccessStatusCode();
             try {
                 OrderPaginationDTO orderPaginationDto = JsonConvert.DeserializeObject<OrderPaginationDTO>(await result.Content.ReadAsStringAsync());
-                Console.WriteLine(orderPaginationDto.count);
+                //Console.WriteLine(orderPaginationDto.count);
                 OrdersList = orderPaginationDto.list;
                 return orderPaginationDto;
             }
-            catch (Exception) { }
+            catch (Exception ex) { }
             return null;
              
         }

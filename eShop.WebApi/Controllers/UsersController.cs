@@ -57,6 +57,7 @@ namespace eShop.WebApi.Controllers
         [AllowAnonymous]
         [HttpPost("AccountCreate")]
         //[CreateAccountFilter] //Otan exw to filter den ftanei to request
+        //TO DO clean up the method and add RollBack mechanism like CreateOrder in OrderController
         public async Task<IActionResult> CreateUser([FromBody] UserDTO user)
         {
             if (user == null)

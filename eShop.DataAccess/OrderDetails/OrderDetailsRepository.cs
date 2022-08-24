@@ -1,4 +1,5 @@
-﻿using eShop.DataAccess.IRepositories;
+﻿using eShop.DataAccess.Helpers;
+using eShop.DataAccess.IRepositories;
 using eShop.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -35,6 +36,11 @@ namespace eShop.DataAccess
                    on orderDet.OrderId equals order.Id
                    select  orderDet ;
         }
+
+        public PagedList<OrderDetails> GetOrderDetailsPaged(int pageNumber, int pageSize)
+        {
+            return PagedList<OrderDetails>.ToPagedList(GetIquerableOrder(), pageNumber, pageSize);            
+        }
     }
 
     public interface IOrderDetailsDbRepository : IDbRepository<OrderDetails>, IOrderDetailsRepository
@@ -43,5 +49,6 @@ namespace eShop.DataAccess
         List<OrderDetails> GetDetailsByOrderId(List<long> orderIds);
 
         IQueryable<OrderDetails> GetIquerableOrder();
+        PagedList<OrderDetails> GetOrderDetailsPaged(int pageNumber, int pageSize);
     }
 }
