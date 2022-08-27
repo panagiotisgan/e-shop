@@ -57,7 +57,8 @@ namespace eShop.WebApi.Controllers
                     orders.TotalCount,
                     orders.TotalPages,
                     orders.HasNext,
-                    orders.HasPrevious
+                    orders.HasPrevious,
+                    orders.CurrentPage
                 };
 
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));

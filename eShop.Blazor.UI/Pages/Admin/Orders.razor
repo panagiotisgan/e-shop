@@ -4,17 +4,33 @@
 
 @attribute [Authorize]
 
+@*<RadzenSteps>
+    <Steps>
+        <RadzenStepsItem Text="Orders">
+            <RadzenDataGrid ColumnWidth="200" AllowFiltering="true" AllowPaging="true" PageSize="2"
+            AllowSorting="true" Data="@Orders" TItem="Dto_Model.OrderDetails">
+                <Columns>
+                    <RadzenDataGridColumn TItem="Dto_Model.OrderDetails" Property="Product.Name" Title="Name" Width="140px" />
+                    <RadzenDataGridColumn TItem="Dto_Model.OrderDetails" Property="Product.Code" Title="Code" />
+                    <RadzenDataGridColumn TItem="Dto_Model.OrderDetails" Property="Quantity" Title="Quantity" />
+                    <RadzenDataGridColumn TItem="Dto_Model.OrderDetails" Property="Product.Price" Title="Price" />
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenStepsItem>
+    </Steps>
+</RadzenSteps>*@
+
 <table class="table">
-  <thead>
-      <tr>
-          <th>Name</th>
-          <th>Pr. Code</th>
-          <th>Quantity</th>
-          <th>Unit Price</th>
-      </tr>
-  </thead>
-  <tbody>
-      @if (Orders is not null && Orders.Count()>0)
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Pr. Code</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Orders is not null && Orders.Count() > 0)
         {
             foreach (var order in Orders)
             {
@@ -25,21 +41,27 @@
                     <td>@order.Product.Price</td>
                 </tr>
             }
-            <tr>
-                <td colspan="2">Page: @CurrentPage of @Pages <a href="#">@((MarkupString)myMarkup)</a> <a href="#">@((MarkupString)greaterThan)</a></td>
-                <td></td>
-                <td></td>
-            </tr>
         }
     </tbody>
 </table>
+<div class="row">
+    <div class="col">
+        <PaginationComponent Metadata="PaginationResult" Spread="2" SelectedPage="SelectedPage" />
+    </div>
+</div>
 
 
 
-@functions {
-    string myMarkup = "<span class='markup'>&lt;</span>";
-    string greaterThan = "<span class='markup'>&gt;</span>";
-}
-@{
-    Console.WriteLine($"{Pages}");
+@code {
+    //string myMarkup = "<span class='markup'>&lt;</span>";
+    //string greaterThan = "<span class='markup'>&gt;</span>";
+
+
+    protected override Task OnInitializedAsync()
+    {
+        Console.WriteLine("Orders Page Initialized");
+
+        return base.OnInitializedAsync();
+    }
+
 }

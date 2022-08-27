@@ -80,7 +80,7 @@ namespace eShop.WebApi
                     //    }
                     //};
                 });
-
+            var headers = new string[] { "X-Pagination" };
             services.AddCors(options =>
             {
                 options.AddPolicy("Open",
@@ -88,7 +88,8 @@ namespace eShop.WebApi
                     {
                         builder.AllowAnyOrigin()
                                .AllowAnyMethod()
-                               .AllowAnyHeader();
+                               .AllowAnyHeader()
+                               .WithExposedHeaders(headers);//This line it's required to expose HttpHeader's ,like X-Pagination, and be accessible from Blazo client site
                     });
             });
 

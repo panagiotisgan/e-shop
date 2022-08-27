@@ -1,0 +1,25 @@
+﻿@inherits PaginationComponentBase
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        @if (_links is not null && _links.Count>0)
+        {
+            @foreach (var link in _links)
+            {
+                <li @onclick="() => OnSelectedPage(link)" style="cursor: pointer;" class="page-item @(link.Enabled ? null : "disabled") @(link.Active ? "active" : null)">
+                    <span class="page-link" href="#">@link.Text</span>
+                </li>
+            }
+        }
+    </ul>
+</nav>
+
+@code{
+    protected override Task OnInitializedAsync()
+    {
+        Console.WriteLine("Pagination Compo Initialized Successfully");
+        Console.WriteLine($"Count of Links {_links.Count}");
+        return base.OnInitializedAsync();
+    }
+
+}
