@@ -1,10 +1,13 @@
 ﻿using Blazored.LocalStorage;
 using eShop.Blazor.UI.Dto_Model;
+using eShop.Blazor.UI.Helpers;
+using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
 namespace eShop.Blazor.UI.Services
@@ -13,10 +16,14 @@ namespace eShop.Blazor.UI.Services
     {
         private HttpClient _client;
         private ILocalStorageService _localStorageService;
-        public ProductService(HttpClient client, ILocalStorageService localStorageService)
+        //private NavigationManager _navigationManager;
+
+        private HttpStatusCodeHandler _httpStatusCodeHandler;
+        public ProductService(HttpClient client, ILocalStorageService localStorageService, HttpStatusCodeHandler httpStatusCodeHandler)
         {
             _client = client;
             _localStorageService = localStorageService;
+            _httpStatusCodeHandler = httpStatusCodeHandler;
         }
 
         public async Task CreateOrUpdateProductAsync(Product product)
@@ -28,7 +35,7 @@ namespace eShop.Blazor.UI.Services
             byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
             if (product.Id > 0)
                 await this._client.PutAsync("api/Products", byteContent);
-           else
+            else
                 await this._client.PostAsync("api/Products", byteContent);
         }
 
@@ -69,13 +76,21 @@ namespace eShop.Blazor.UI.Services
             //var response = await _client.SendAsync(requestMessage); 
 
             var result = await _client.GetAsync("api/Products/GetProducts");
-            if (result.IsSuccessStatusCode)
+
+            if(!result.IsSuccessStatusCode)
             {
-                var content = await result.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<IEnumerable<Product>>(content);
+                //var status  = result.StatusCode;
+
+                //switch (status)
+                //{
+                //    case System.Net.HttpStatusCode.Unauthorized:_navigationManager.NavigateTo("/Unauthorized");
+                //        break;
+                //}
+                _httpStatusCodeHandler.ReturnRespones(result.StatusCode);
             }
 
-            return null;
+            var content = await result.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<IEnumerable<Product>>(content);
         }
     }
 }

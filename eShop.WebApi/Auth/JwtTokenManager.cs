@@ -12,14 +12,14 @@ namespace eShop.WebApi.Auth
 {
     public class JwtTokenManager : ICustomManager
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
         private JwtSecurityTokenHandler _jwtTokenHandler;
         private readonly IUserUnitOfWork _userUnitOfWork;//Tha prepei na fugei kai na mpei kapoios CacheMemory mhxanismos gia na mhn xtupaw ksana to API, 8elw ton xrhsth gia na valw sta CLAIMS ki alla
         private byte[] secretKey;
 
         public JwtTokenManager(IConfiguration configuration, IUserUnitOfWork userUnitOfWork)
         {
-            this.configuration = configuration;
+            _configuration = configuration;
             _jwtTokenHandler = new JwtSecurityTokenHandler();
             secretKey = Encoding.ASCII.GetBytes(configuration.GetValue<string>("JwtTokenKey"));
             _userUnitOfWork = userUnitOfWork;
@@ -40,7 +40,7 @@ namespace eShop.WebApi.Auth
                }               
                //new Claim(ClaimTypes.Role, user.Role)
                ),
-                Expires = DateTime.Now.AddMinutes(2),
+                Expires = DateTime.UtcNow.AddMinutes(20),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature)                
             };
 

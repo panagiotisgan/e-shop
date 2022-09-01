@@ -33,7 +33,7 @@ namespace eShop.Blazor.UI
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             //builder.Services.AddSingleton<ITokenRepository, TokenRepository>();
             builder.Services.AddScoped<AuthenticationStateProvider, JwtTokenAuthenticationStateProvider>();
-            
+            builder.Services.AddSingleton<HttpStatusCodeHandler>();
 
             //builder.Services.AddHttpClient<IProductService, ProductService>(client =>
             // client.BaseAddress = new Uri("https://localhost:44371/"));
