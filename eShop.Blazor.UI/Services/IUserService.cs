@@ -9,5 +9,6 @@ namespace eShop.Blazor.UI.Services
     public interface IUserService
     {
         Task<IEnumerable<User>> GetUsersAsync();
+        Task<bool> SetUserAccountState(User user);
     }
 }

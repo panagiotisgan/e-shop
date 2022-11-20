@@ -11,7 +11,7 @@ namespace eShop.Blazor.UI.Pages
 {
     public class ProductsBase : ComponentBase
     {
-        private HttpRequestMessage _httpRequest;
+        //private HttpRequestMessage _httpRequest;
         
         [Inject]
         public IProductService ProductService { get; set; }

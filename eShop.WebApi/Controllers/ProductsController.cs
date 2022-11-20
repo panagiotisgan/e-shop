@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace eShop.WebApi.Controllers
@@ -66,7 +68,7 @@ namespace eShop.WebApi.Controllers
 
             return this.Ok();
         }
-        
+
         [HttpPut]
         public IActionResult Update([FromBody] Product product)
         {
@@ -77,10 +79,20 @@ namespace eShop.WebApi.Controllers
 
             try
             {
-                this._productUnitOfWork.ProductRepository.UpdateEntity(product);
+                //Get the entity from db to enable tracking
+                var dbEntity = _productUnitOfWork.ProductRepository.GetById(product.Id);
+                
+                dbEntity.StockQty = product.StockQty;
+                dbEntity.Price = product.Price;
+                dbEntity.CategoryId = product.CategoryId;
+                dbEntity.Code = product.Code;
+                dbEntity.InStock = product.InStock;
+                dbEntity.Name = product.Name;
+                dbEntity.Images = product.Images;
+
                 this._productUnitOfWork.Save();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -89,7 +101,7 @@ namespace eShop.WebApi.Controllers
         }
 
         [HttpDelete("delete")]
-        public async Task<IActionResult> Delete([FromQuery]long productId)
+        public async Task<IActionResult> Delete([FromQuery] long productId)
         {
             if (productId == 0)
                 return BadRequest();
@@ -105,7 +117,7 @@ namespace eShop.WebApi.Controllers
                     }
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
 
             }
@@ -115,12 +127,36 @@ namespace eShop.WebApi.Controllers
                 this._productUnitOfWork.ProductRepository.DeleteEntity(productId);
                 this._productUnitOfWork.Save();
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
 
             return Ok();
         }
+
+
+        //private List<string> GetChangedProperties<T>(object A, object B)
+        //{
+        //    if (A != null && B != null)
+        //    {
+        //        var type = typeof(T);
+        //        var allProperties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        //        var allSimpleProperties = allProperties.Where(pi => pi.PropertyType == );
+        //        var unequalProperties =
+        //               from pi in allSimpleProperties
+        //               let AValue = type.GetProperty(pi.Name).GetValue(A, null)
+        //               let BValue = type.GetProperty(pi.Name).GetValue(B, null)
+        //               where AValue != BValue && (AValue == null || !AValue.Equals(BValue))
+        //               select pi.Name;
+        //        return unequalProperties.ToList();
+        //    }
+        //    else
+        //    {
+        //        throw new ArgumentNullException("You need to provide 2 non-null objects");
+        //    }
+        //}
     }
+
+
 }

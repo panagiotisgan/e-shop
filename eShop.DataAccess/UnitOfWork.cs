@@ -18,12 +18,12 @@ namespace eShop.DataAccess
 
         public void DisableChangeTracker()
         {
-            throw new NotImplementedException();
+            _context.ChangeTracker.QueryTrackingBehavior = Microsoft.EntityFrameworkCore.QueryTrackingBehavior.NoTracking;
         }
 
         public void EnableChangeTracker()
         {
-            throw new NotImplementedException();
+            _context.ChangeTracker.DetectChanges();
         }
 
         public void Save()

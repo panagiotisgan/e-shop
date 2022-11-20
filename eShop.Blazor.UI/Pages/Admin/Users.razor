@@ -1,47 +1,84 @@
 ﻿@page "/admin/users"
 
+@using eShop.Blazor.UI.Dto_Model
+@using eShop.Blazor.UI.Components
+
 @inherits UsersBase
 
-@*<TableComponent Items="Users" Context="User">
-    <TableHeader>
-        <th>FirstName</th>
-        <th>AddressNo1</th>
-        <th>Email</th>
-    </TableHeader>
-    <RowTemplate>
-        <td>@User.FirstName</td>
-        <td>@User.AddressNo1</td>
-        <td>@User.Email</td>
-    </RowTemplate>
-</TableComponent>*@
-
-<table class="table table-responsive-sm">
+@*<table class="table table-responsive-sm">
     <thead>
         <tr>
             <th colspan="2">Fullname</th>
             <th>Email</th>
             <th>Address</th>
             <th>Phone</th>
+            <th></th>
         </tr>
     </thead>
-    @if (Users != null)
+    @if (users != null)
     {
         <tbody>
-            @foreach (var user in Users)
+            @foreach (var user in users)
             {
 
                 <tr>
+                    <td style="display:none">@user.Id</td>
                     <td colspan="2">@user.LastName @user.FirstName</td>
                     <td>@user.Email</td>
                     <td>@user.AddressNo1</td>
                     <td>@user.PhoneNumber</td>
+                    <td>
+                        <CustomButtonComponent SelectedUser="@user" OnUpdateActive="@(async()=> await OnUpdateActivity(user))"></CustomButtonComponent>
+                    </td>
                 </tr>
 
             }
         </tbody>
     }
-</table>
+</table>*@
+
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5"
+                AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left"
+                ShowPagingSummary="true" Data="@users" TItem="Dto_Model.User"
+                ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+    <Columns>
+        <RadzenDataGridColumn TItem="Dto_Model.User" Property="Id" Visible="false" />
+        <RadzenDataGridColumn TItem="Dto_Model.User" Property="FirstName" Title="First Name" Width="160px" />
+        <RadzenDataGridColumn TItem="Dto_Model.User" Property="LastName" Title="Last Name" Width="160px" />
+        <RadzenDataGridColumn TItem="Dto_Model.User" Property="Email" Title="Email" Width="120px" />
+        <RadzenDataGridColumn TItem="Dto_Model.User" Property="CityName" Title="CityName" Width="160px" />
+        <RadzenDataGridColumn TItem="Dto_Model.User" Property="PhoneNumber" Title="Phone" Width="160px" />
+        <RadzenDataGridColumn TItem="Dto_Model.User" Filterable="true" Sortable="false" TextAlign="TextAlign.Center" Width="80px" FilterProperty="IsActiveAccount">
+            <Template Context="user">
+                <CustomButtonComponent SelectedUser="@user" OnUpdateActive="@(async()=> await OnUpdateActivity(user))"></CustomButtonComponent>
+            </Template>
+
+        </RadzenDataGridColumn>
+       @* <RadzenDataGridColumn TItem="Dto_Model.User" Context="user" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="80px">
+            <RadzenButton Variant="Variant.Outlined" Shade="Shade.Lighter" Click=@(async() => await OnUpdateActivity(user))
+                Text="@user.ButtonLabel" ButtonStyle="@user.StyleOfButton">
+            </RadzenButton>
+        </RadzenDataGridColumn>*@
+
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    async Task OnUpdateActivity(User user)
+    {
+        Console.WriteLine(user.Id.ToString());
+        if (await UserService.SetUserAccountState(user))
+        {
+            //One way to update UI for the state of user activity on fly after make the original update in db
+            var updatedUser = users.FirstOrDefault(x => x.Id == user.Id);
+
+            //Possible check after set the Activity value if it is equal with DB
+            updatedUser.IsActiveAccount = !user.IsActiveAccount;
+        }
 
 
-@code {   
+        //second way to display the updated user state by call the userService and update the list
+        //users = await UserService.GetUsersAsync();
+
+    }
 }

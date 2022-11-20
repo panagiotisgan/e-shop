@@ -12,11 +12,11 @@ namespace eShop.Blazor.UI.Pages.Admin
     {
         [Inject]
         public IUserService UserService { get; set; }
-        public IEnumerable<User> Users { get; set; }
+        public IEnumerable<User> users { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
-            Users = (await UserService.GetUsersAsync()).ToList();
+            users = (await UserService.GetUsersAsync()).ToList();
         }
     }
 }

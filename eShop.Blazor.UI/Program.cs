@@ -37,20 +37,11 @@ namespace eShop.Blazor.UI
 
             //builder.Services.AddHttpClient<IProductService, ProductService>(client =>
             // client.BaseAddress = new Uri("https://localhost:44371/"));
+                        
 
-            //Error me provlima sto registration to httpClient me ViewModel
-            builder.Services.AddHttpClient<IProductViewModel, ProductViewModel>(client =>
-             client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IOrderService, OrderService>(client =>
-             client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IUserService, UserService>(client =>
-             client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<ICategoryService, CategoryService>(client =>
-                 client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IImageService, ImageService>(client =>
-                client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IProductService, ProductService>(client =>
-                client.BaseAddress = new Uri(baseUrl));
+            builder.Services.ServicesRegister(baseUrl);
+
+
             //builder.Services.AddHttpClient<IAuthenticateService, AuthenticateService>(client => 
             //client.BaseAddress = new Uri("https://localhost:44371/"));
 

@@ -29,6 +29,14 @@ namespace eShop.DataAccess
             var credentials = await _context.Credentials.FirstOrDefaultAsync(x => x.Username == userName);
             return await this._context.Users.FirstOrDefaultAsync(u=>u.CredentialId==credentials.Id);
         }
+
+        public async Task UpdateAccount(long UserId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x=>x.Id==UserId);
+            if(user==null) 
+                return;
+            user.IsActiveAccount = !user.IsActiveAccount;
+        }
     }
 
     public interface IUserDbRepository : IDbRepository<eShop.Model.User>, IUserRepository
@@ -36,5 +44,6 @@ namespace eShop.DataAccess
         bool AdminExist();
         Task<User> GetUserByCredentialId(long id);
         Task<User> GetUserByUserName(string userName);
+        Task UpdateAccount(long UserId);
     }
 }

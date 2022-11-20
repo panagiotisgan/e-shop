@@ -85,7 +85,7 @@ namespace eShop.WebApi.Controllers
                     actualUser.FirstName = user.FirstName;
                     actualUser.LastName = user.LastName;
                     actualUser.PhoneNumber = user.PhoneNumber;
-                    actualUser.Role = user.Role; ;
+                    actualUser.Role = user.Role;
                     actualUser.VATNumber = user.VATNumber;
                     actualUser.ZipCode = user.ZipCode;
                     actualUser.AddressNo1 = user.AddressNo1;
@@ -115,6 +115,26 @@ namespace eShop.WebApi.Controllers
             //this._context.User.Identity.
 
             return Ok(users);
+        }
+
+        [HttpPost("UpdateState")]
+        public async Task<IActionResult> UpdateAccountState([FromBody]TestObj test)
+        {
+            try
+            {
+                await _userUnitOfWork.UserDbRepository.UpdateAccount(test.Id);
+                _userUnitOfWork.Save();
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        public class TestObj
+        {
+            public long Id { get; set; }
         }
     }
 }

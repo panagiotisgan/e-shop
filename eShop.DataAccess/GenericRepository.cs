@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,11 +30,12 @@ namespace eShop.DataAccess
         {
             return _context.Set<TEntity>().Find(modelId);
         }
-
+        //Update Entire entity
         public virtual void UpdateEntity(TEntity entity)
         {
             _context.Set<TEntity>().Update(entity);
         }
+
         public void CreateEntity(TEntity entity)
         {
             _context.Set<TEntity>().Add(entity);
@@ -63,6 +66,6 @@ namespace eShop.DataAccess
         public IQueryable<TEntity> GetQueryable()
         {
             return _context.Set<TEntity>().AsQueryable();
-        }
+        }        
     }
 }

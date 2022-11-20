@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Radzen;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ namespace eShop.Blazor.UI.Dto_Model
 {
     public class User
     {
+        public long Id { get; set; }
         public long CountryId { get; set; }
         public Country Country { get; set; }        
         public string FirstName { get; set; }
@@ -24,5 +26,16 @@ namespace eShop.Blazor.UI.Dto_Model
         //public Credential Credential { get; set; }
         public string StateName { get; set; }
         public string CityName { get; set; }
+        public string ButtonLabel => IsActiveAccount ? "Disable" : "Enable";
+
+        //public ButtonStyle StyleOfButton
+        //{
+        //    get
+        //    {
+        //        return IsActiveAccount ? ButtonStyle.Danger : ButtonStyle.Success;
+        //    }
+        //}
+
+        public string ButtonClass => IsActiveAccount ? "btn btn-danger" : "btn btn-success";
     }
 }
